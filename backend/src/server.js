@@ -21,8 +21,8 @@ const app = express();
 
 const __dirname = path.resolve();
 
-// special handling: Stripe webhook needs raw body BEFORE any body parsing middleware
-// apply raw body parser conditionally only to webhook endpoint
+// TODO(stripe): when Stripe is enabled again, restore raw-body webhook handling block below.
+/*
 app.use(
   "/api/payment",
   (req, res, next) => {
@@ -34,6 +34,8 @@ app.use(
   },
   paymentRoutes
 );
+*/
+app.use("/api/payment", paymentRoutes);
 
 app.use(express.json());
 app.use(clerkMiddleware()); // adds auth object under the req => req.auth

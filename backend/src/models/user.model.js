@@ -55,10 +55,11 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-    stripeCustomerId: {
-      type: String,
-      default: "",
-    },
+    // TODO(stripe): uncomment when Stripe is needed again.
+    // stripeCustomerId: {
+    //   type: String,
+    //   default: "",
+    // },
     addresses: [addressSchema],
     wishlist: [
       {
