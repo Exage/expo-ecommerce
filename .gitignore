@@ -1,0 +1,7 @@
+node_modules
+.env
+
+db_creds
+.DS_Store
+
+node_modules
