@@ -2,19 +2,12 @@ import { ENV } from "../config/env.js";
 import { Product } from "../models/product.model.js";
 import { Order } from "../models/order.model.js";
 import { Cart } from "../models/cart.model.js";
+import Stripe from "stripe";
+import { User } from "../models/user.model.js";
 
-// TODO(stripe): uncomment when Stripe is needed again.
-// import Stripe from "stripe";
-// import { User } from "../models/user.model.js";
-// const stripe = new Stripe(ENV.STRIPE_SECRET_KEY);
+const stripe = new Stripe(ENV.STRIPE_SECRET_KEY);
 
 export async function createPaymentIntent(req, res) {
-  // TODO(stripe): remove this temporary return and uncomment Stripe logic below.
-  return res.status(503).json({
-    error: "Stripe payments are temporarily disabled",
-  });
-
-  /*
   try {
     const { cartItems, shippingAddress } = req.body;
     const user = req.user;
@@ -99,16 +92,9 @@ export async function createPaymentIntent(req, res) {
     console.error("Error creating payment intent:", error);
     res.status(500).json({ error: "Failed to create payment intent" });
   }
-  */
 }
 
 export async function handleWebhook(req, res) {
-  // TODO(stripe): remove this temporary return and uncomment Stripe logic below.
-  return res.status(503).json({
-    error: "Stripe webhook is temporarily disabled",
-  });
-
-  /*
   const sig = req.headers["stripe-signature"];
   let event;
 
@@ -162,5 +148,4 @@ export async function handleWebhook(req, res) {
   }
 
   res.json({ received: true });
-  */
 }
