@@ -1,0 +1,1726 @@
+{
+  "version": 1,
+  "topLevelProductFields": [
+    "name",
+    "description",
+    "price",
+    "stock",
+    "images",
+    "category",
+    "subcategory"
+  ],
+  "categories": [
+    {
+      "slug": "electronics",
+      "name": "Electronics",
+      "subcategories": [
+        {
+          "slug": "smartphone",
+          "name": "Smartphone",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "model": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "operatingSystem": {
+              "type": "enum",
+              "required": true,
+              "default": "android",
+              "filterable": true,
+              "options": [
+                "android",
+                "ios",
+                "other"
+              ]
+            },
+            "screenSize": {
+              "type": "number",
+              "required": true,
+              "default": 6.1,
+              "unit": "inch",
+              "filterable": true
+            },
+            "displayType": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "processor": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": false
+            },
+            "ram": {
+              "type": "number",
+              "required": true,
+              "default": 8,
+              "unit": "GB",
+              "filterable": true
+            },
+            "storage": {
+              "type": "number",
+              "required": true,
+              "default": 128,
+              "unit": "GB",
+              "filterable": true
+            },
+            "batteryCapacity": {
+              "type": "number",
+              "required": false,
+              "default": 4500,
+              "unit": "mAh",
+              "filterable": true
+            },
+            "mainCamera": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": false
+            },
+            "frontCamera": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": false
+            },
+            "refreshRate": {
+              "type": "number",
+              "required": false,
+              "default": 60,
+              "unit": "Hz",
+              "filterable": true
+            },
+            "connectivity": {
+              "type": "string[]",
+              "required": false,
+              "default": [],
+              "filterable": true
+            },
+            "simType": {
+              "type": "enum",
+              "required": false,
+              "default": "nano-sim",
+              "filterable": true,
+              "options": [
+                "nano-sim",
+                "dual-sim",
+                "esim",
+                "dual-sim+esim"
+              ]
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "warranty": {
+              "type": "number",
+              "required": false,
+              "default": 12,
+              "unit": "months",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "laptop",
+          "name": "Laptop",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "model": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "processor": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "ram": {
+              "type": "number",
+              "required": true,
+              "default": 16,
+              "unit": "GB",
+              "filterable": true
+            },
+            "storage": {
+              "type": "number",
+              "required": true,
+              "default": 512,
+              "unit": "GB",
+              "filterable": true
+            },
+            "storageType": {
+              "type": "enum",
+              "required": false,
+              "default": "ssd",
+              "filterable": true,
+              "options": [
+                "ssd",
+                "hdd",
+                "ssd+hdd"
+              ]
+            },
+            "screenSize": {
+              "type": "number",
+              "required": true,
+              "default": 15.6,
+              "unit": "inch",
+              "filterable": true
+            },
+            "resolution": {
+              "type": "string",
+              "required": false,
+              "default": "1920x1080",
+              "filterable": true
+            },
+            "gpu": {
+              "type": "string",
+              "required": false,
+              "default": "integrated",
+              "filterable": true
+            },
+            "operatingSystem": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "batteryLife": {
+              "type": "number",
+              "required": false,
+              "default": 8,
+              "unit": "hours",
+              "filterable": true
+            },
+            "weight": {
+              "type": "number",
+              "required": false,
+              "default": 1.8,
+              "unit": "kg",
+              "filterable": true
+            },
+            "ports": {
+              "type": "string[]",
+              "required": false,
+              "default": [],
+              "filterable": false
+            },
+            "keyboardLayout": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "warranty": {
+              "type": "number",
+              "required": false,
+              "default": 12,
+              "unit": "months",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "headphones",
+          "name": "Headphones",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "model": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "type": {
+              "type": "enum",
+              "required": true,
+              "default": "over-ear",
+              "filterable": true,
+              "options": [
+                "in-ear",
+                "on-ear",
+                "over-ear",
+                "tws"
+              ]
+            },
+            "connectivity": {
+              "type": "enum",
+              "required": true,
+              "default": "wireless",
+              "filterable": true,
+              "options": [
+                "wired",
+                "wireless",
+                "hybrid"
+              ]
+            },
+            "noiseCancellation": {
+              "type": "boolean",
+              "required": false,
+              "default": false,
+              "filterable": true
+            },
+            "batteryLife": {
+              "type": "number",
+              "required": false,
+              "default": 24,
+              "unit": "hours",
+              "filterable": true
+            },
+            "microphone": {
+              "type": "boolean",
+              "required": false,
+              "default": true,
+              "filterable": true
+            },
+            "waterResistance": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "frequencyRange": {
+              "type": "string",
+              "required": false,
+              "default": "20Hz-20kHz",
+              "filterable": false
+            },
+            "impedance": {
+              "type": "number",
+              "required": false,
+              "default": 32,
+              "unit": "ohm",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "warranty": {
+              "type": "number",
+              "required": false,
+              "default": 12,
+              "unit": "months",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "smartwatch",
+          "name": "Smartwatch",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "model": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "compatibleOS": {
+              "type": "string[]",
+              "required": false,
+              "default": [],
+              "filterable": true
+            },
+            "screenSize": {
+              "type": "number",
+              "required": false,
+              "default": 1.5,
+              "unit": "inch",
+              "filterable": true
+            },
+            "displayType": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "batteryLife": {
+              "type": "number",
+              "required": false,
+              "default": 48,
+              "unit": "hours",
+              "filterable": true
+            },
+            "sensors": {
+              "type": "string[]",
+              "required": false,
+              "default": [],
+              "filterable": true
+            },
+            "gps": {
+              "type": "boolean",
+              "required": false,
+              "default": true,
+              "filterable": true
+            },
+            "waterResistance": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "connectivity": {
+              "type": "string[]",
+              "required": false,
+              "default": [],
+              "filterable": true
+            },
+            "strapMaterial": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "warranty": {
+              "type": "number",
+              "required": false,
+              "default": 12,
+              "unit": "months",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "television",
+          "name": "Television",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "model": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "screenSize": {
+              "type": "number",
+              "required": true,
+              "default": 55,
+              "unit": "inch",
+              "filterable": true
+            },
+            "resolution": {
+              "type": "enum",
+              "required": true,
+              "default": "4k",
+              "filterable": true,
+              "options": [
+                "hd",
+                "full-hd",
+                "2k",
+                "4k",
+                "8k"
+              ]
+            },
+            "displayType": {
+              "type": "enum",
+              "required": false,
+              "default": "led",
+              "filterable": true,
+              "options": [
+                "led",
+                "qled",
+                "oled",
+                "mini-led"
+              ]
+            },
+            "refreshRate": {
+              "type": "number",
+              "required": false,
+              "default": 60,
+              "unit": "Hz",
+              "filterable": true
+            },
+            "smartTV": {
+              "type": "boolean",
+              "required": false,
+              "default": true,
+              "filterable": true
+            },
+            "operatingSystem": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "hdrSupport": {
+              "type": "boolean",
+              "required": false,
+              "default": true,
+              "filterable": true
+            },
+            "ports": {
+              "type": "string[]",
+              "required": false,
+              "default": [],
+              "filterable": false
+            },
+            "audioPower": {
+              "type": "number",
+              "required": false,
+              "default": 20,
+              "unit": "W",
+              "filterable": true
+            },
+            "wallMountSupport": {
+              "type": "boolean",
+              "required": false,
+              "default": true,
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "black",
+              "filterable": true
+            },
+            "warranty": {
+              "type": "number",
+              "required": false,
+              "default": 12,
+              "unit": "months",
+              "filterable": false
+            }
+          }
+        }
+      ],
+      "icon": "phone-portrait-outline"
+    },
+    {
+      "slug": "fashion",
+      "name": "Fashion",
+      "subcategories": [
+        {
+          "slug": "t-shirt",
+          "name": "T-Shirt",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "gender": {
+              "type": "enum",
+              "required": false,
+              "default": "unisex",
+              "filterable": true,
+              "options": [
+                "men",
+                "women",
+                "kids",
+                "unisex"
+              ]
+            },
+            "size": {
+              "type": "string",
+              "required": true,
+              "default": "M",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "material": {
+              "type": "string",
+              "required": false,
+              "default": "cotton",
+              "filterable": true
+            },
+            "fit": {
+              "type": "string",
+              "required": false,
+              "default": "regular",
+              "filterable": true
+            },
+            "sleeveLength": {
+              "type": "string",
+              "required": false,
+              "default": "short",
+              "filterable": true
+            },
+            "neckline": {
+              "type": "string",
+              "required": false,
+              "default": "crew",
+              "filterable": true
+            },
+            "pattern": {
+              "type": "string",
+              "required": false,
+              "default": "solid",
+              "filterable": true
+            },
+            "season": {
+              "type": "string",
+              "required": false,
+              "default": "all-season",
+              "filterable": true
+            },
+            "careInstructions": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "jeans",
+          "name": "Jeans",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "gender": {
+              "type": "enum",
+              "required": false,
+              "default": "unisex",
+              "filterable": true,
+              "options": [
+                "men",
+                "women",
+                "kids",
+                "unisex"
+              ]
+            },
+            "size": {
+              "type": "string",
+              "required": true,
+              "default": "32",
+              "filterable": true
+            },
+            "waist": {
+              "type": "number",
+              "required": false,
+              "default": 32,
+              "unit": "inch",
+              "filterable": true
+            },
+            "length": {
+              "type": "number",
+              "required": false,
+              "default": 32,
+              "unit": "inch",
+              "filterable": true
+            },
+            "fit": {
+              "type": "string",
+              "required": false,
+              "default": "regular",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "blue",
+              "filterable": true
+            },
+            "material": {
+              "type": "string",
+              "required": false,
+              "default": "denim",
+              "filterable": true
+            },
+            "stretch": {
+              "type": "boolean",
+              "required": false,
+              "default": false,
+              "filterable": true
+            },
+            "rise": {
+              "type": "string",
+              "required": false,
+              "default": "mid",
+              "filterable": true
+            },
+            "pattern": {
+              "type": "string",
+              "required": false,
+              "default": "solid",
+              "filterable": true
+            },
+            "season": {
+              "type": "string",
+              "required": false,
+              "default": "all-season",
+              "filterable": true
+            },
+            "careInstructions": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "jacket",
+          "name": "Jacket",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "gender": {
+              "type": "enum",
+              "required": false,
+              "default": "unisex",
+              "filterable": true,
+              "options": [
+                "men",
+                "women",
+                "kids",
+                "unisex"
+              ]
+            },
+            "size": {
+              "type": "string",
+              "required": true,
+              "default": "M",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "material": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "insulationType": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "waterproof": {
+              "type": "boolean",
+              "required": false,
+              "default": false,
+              "filterable": true
+            },
+            "windproof": {
+              "type": "boolean",
+              "required": false,
+              "default": false,
+              "filterable": true
+            },
+            "closureType": {
+              "type": "string",
+              "required": false,
+              "default": "zip",
+              "filterable": true
+            },
+            "hood": {
+              "type": "boolean",
+              "required": false,
+              "default": false,
+              "filterable": true
+            },
+            "season": {
+              "type": "string",
+              "required": false,
+              "default": "all-season",
+              "filterable": true
+            },
+            "careInstructions": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "sneakers",
+          "name": "Sneakers",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "gender": {
+              "type": "enum",
+              "required": false,
+              "default": "unisex",
+              "filterable": true,
+              "options": [
+                "men",
+                "women",
+                "kids",
+                "unisex"
+              ]
+            },
+            "size": {
+              "type": "string",
+              "required": true,
+              "default": "42",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "material": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "soleMaterial": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "closureType": {
+              "type": "string",
+              "required": false,
+              "default": "lace-up",
+              "filterable": true
+            },
+            "sportType": {
+              "type": "string",
+              "required": false,
+              "default": "lifestyle",
+              "filterable": true
+            },
+            "cushioning": {
+              "type": "string",
+              "required": false,
+              "default": "medium",
+              "filterable": true
+            },
+            "waterproof": {
+              "type": "boolean",
+              "required": false,
+              "default": false,
+              "filterable": true
+            },
+            "season": {
+              "type": "string",
+              "required": false,
+              "default": "all-season",
+              "filterable": true
+            },
+            "careInstructions": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "bag",
+          "name": "Bag",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "type": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "material": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "dimensions": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": false
+            },
+            "capacity": {
+              "type": "number",
+              "required": false,
+              "default": 20,
+              "unit": "L",
+              "filterable": true
+            },
+            "closureType": {
+              "type": "string",
+              "required": false,
+              "default": "zip",
+              "filterable": true
+            },
+            "strapType": {
+              "type": "string",
+              "required": false,
+              "default": "adjustable",
+              "filterable": true
+            },
+            "waterproof": {
+              "type": "boolean",
+              "required": false,
+              "default": false,
+              "filterable": true
+            },
+            "compartments": {
+              "type": "number",
+              "required": false,
+              "default": 1,
+              "filterable": true
+            },
+            "season": {
+              "type": "string",
+              "required": false,
+              "default": "all-season",
+              "filterable": true
+            },
+            "careInstructions": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": false
+            }
+          }
+        }
+      ],
+      "icon": "shirt-outline"
+    },
+    {
+      "slug": "sports",
+      "name": "Sports",
+      "subcategories": [
+        {
+          "slug": "running-shoes",
+          "name": "Running Shoes",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "gender": {
+              "type": "enum",
+              "required": false,
+              "default": "unisex",
+              "filterable": true,
+              "options": [
+                "men",
+                "women",
+                "kids",
+                "unisex"
+              ]
+            },
+            "size": {
+              "type": "string",
+              "required": true,
+              "default": "42",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "surfaceType": {
+              "type": "string",
+              "required": false,
+              "default": "road",
+              "filterable": true
+            },
+            "cushioning": {
+              "type": "string",
+              "required": false,
+              "default": "medium",
+              "filterable": true
+            },
+            "stability": {
+              "type": "string",
+              "required": false,
+              "default": "neutral",
+              "filterable": true
+            },
+            "drop": {
+              "type": "number",
+              "required": false,
+              "default": 8,
+              "unit": "mm",
+              "filterable": true
+            },
+            "weight": {
+              "type": "number",
+              "required": false,
+              "default": 280,
+              "unit": "g",
+              "filterable": true
+            },
+            "material": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "waterproof": {
+              "type": "boolean",
+              "required": false,
+              "default": false,
+              "filterable": true
+            },
+            "sportLevel": {
+              "type": "string",
+              "required": false,
+              "default": "beginner",
+              "filterable": true
+            }
+          }
+        },
+        {
+          "slug": "bicycle",
+          "name": "Bicycle",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "model": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "bikeType": {
+              "type": "string",
+              "required": true,
+              "default": "mountain",
+              "filterable": true
+            },
+            "frameMaterial": {
+              "type": "string",
+              "required": false,
+              "default": "aluminum",
+              "filterable": true
+            },
+            "frameSize": {
+              "type": "string",
+              "required": false,
+              "default": "M",
+              "filterable": true
+            },
+            "wheelSize": {
+              "type": "number",
+              "required": false,
+              "default": 27.5,
+              "unit": "inch",
+              "filterable": true
+            },
+            "suspension": {
+              "type": "string",
+              "required": false,
+              "default": "front",
+              "filterable": true
+            },
+            "brakeType": {
+              "type": "string",
+              "required": false,
+              "default": "disc",
+              "filterable": true
+            },
+            "gearCount": {
+              "type": "number",
+              "required": false,
+              "default": 21,
+              "filterable": true
+            },
+            "weight": {
+              "type": "number",
+              "required": false,
+              "default": 14,
+              "unit": "kg",
+              "filterable": true
+            },
+            "intendedUse": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "warranty": {
+              "type": "number",
+              "required": false,
+              "default": 12,
+              "unit": "months",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "dumbbells",
+          "name": "Dumbbells",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "weight": {
+              "type": "number",
+              "required": true,
+              "default": 10,
+              "unit": "kg",
+              "filterable": true
+            },
+            "adjustable": {
+              "type": "boolean",
+              "required": false,
+              "default": false,
+              "filterable": true
+            },
+            "material": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "gripType": {
+              "type": "string",
+              "required": false,
+              "default": "standard",
+              "filterable": false
+            },
+            "coating": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "setIncludes": {
+              "type": "string",
+              "required": false,
+              "default": "2 dumbbells",
+              "filterable": false
+            },
+            "intendedUse": {
+              "type": "string",
+              "required": false,
+              "default": "home",
+              "filterable": true
+            },
+            "warranty": {
+              "type": "number",
+              "required": false,
+              "default": 12,
+              "unit": "months",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "yoga-mat",
+          "name": "Yoga Mat",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "thickness": {
+              "type": "number",
+              "required": false,
+              "default": 6,
+              "unit": "mm",
+              "filterable": true
+            },
+            "length": {
+              "type": "number",
+              "required": false,
+              "default": 183,
+              "unit": "cm",
+              "filterable": true
+            },
+            "width": {
+              "type": "number",
+              "required": false,
+              "default": 61,
+              "unit": "cm",
+              "filterable": true
+            },
+            "material": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "nonSlip": {
+              "type": "boolean",
+              "required": false,
+              "default": true,
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "carryStrapIncluded": {
+              "type": "boolean",
+              "required": false,
+              "default": true,
+              "filterable": true
+            },
+            "intendedUse": {
+              "type": "string",
+              "required": false,
+              "default": "yoga",
+              "filterable": true
+            },
+            "warranty": {
+              "type": "number",
+              "required": false,
+              "default": 6,
+              "unit": "months",
+              "filterable": false
+            }
+          }
+        },
+        {
+          "slug": "football",
+          "name": "Football",
+          "specs": {
+            "brand": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "size": {
+              "type": "number",
+              "required": true,
+              "default": 5,
+              "filterable": true
+            },
+            "material": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "surfaceType": {
+              "type": "string",
+              "required": false,
+              "default": "grass",
+              "filterable": true
+            },
+            "stitchedType": {
+              "type": "string",
+              "required": false,
+              "default": "machine-stitched",
+              "filterable": true
+            },
+            "intendedUse": {
+              "type": "string",
+              "required": false,
+              "default": "training",
+              "filterable": true
+            },
+            "certification": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "color": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "warranty": {
+              "type": "number",
+              "required": false,
+              "default": 6,
+              "unit": "months",
+              "filterable": false
+            }
+          }
+        }
+      ],
+      "icon": "football-outline"
+    },
+    {
+      "slug": "books",
+      "name": "Books",
+      "subcategories": [
+        {
+          "slug": "fiction",
+          "name": "Fiction",
+          "specs": {
+            "author": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "publisher": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "language": {
+              "type": "string",
+              "required": false,
+              "default": "english",
+              "filterable": true
+            },
+            "publicationYear": {
+              "type": "number",
+              "required": false,
+              "default": 2024,
+              "filterable": true
+            },
+            "isbn": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "format": {
+              "type": "enum",
+              "required": false,
+              "default": "paperback",
+              "filterable": true,
+              "options": [
+                "paperback",
+                "hardcover",
+                "ebook",
+                "audiobook"
+              ]
+            },
+            "pageCount": {
+              "type": "number",
+              "required": false,
+              "default": 300,
+              "filterable": true
+            },
+            "coverType": {
+              "type": "string",
+              "required": false,
+              "default": "soft",
+              "filterable": true
+            },
+            "genre": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "series": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "ageGroup": {
+              "type": "string",
+              "required": false,
+              "default": "adult",
+              "filterable": true
+            }
+          }
+        },
+        {
+          "slug": "non-fiction",
+          "name": "Non-Fiction",
+          "specs": {
+            "author": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "publisher": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "language": {
+              "type": "string",
+              "required": false,
+              "default": "english",
+              "filterable": true
+            },
+            "publicationYear": {
+              "type": "number",
+              "required": false,
+              "default": 2024,
+              "filterable": true
+            },
+            "isbn": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "format": {
+              "type": "enum",
+              "required": false,
+              "default": "paperback",
+              "filterable": true,
+              "options": [
+                "paperback",
+                "hardcover",
+                "ebook",
+                "audiobook"
+              ]
+            },
+            "pageCount": {
+              "type": "number",
+              "required": false,
+              "default": 300,
+              "filterable": true
+            },
+            "coverType": {
+              "type": "string",
+              "required": false,
+              "default": "soft",
+              "filterable": true
+            },
+            "topic": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "ageGroup": {
+              "type": "string",
+              "required": false,
+              "default": "adult",
+              "filterable": true
+            }
+          }
+        },
+        {
+          "slug": "childrens-books",
+          "name": "Children's Books",
+          "specs": {
+            "author": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "publisher": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "language": {
+              "type": "string",
+              "required": false,
+              "default": "english",
+              "filterable": true
+            },
+            "publicationYear": {
+              "type": "number",
+              "required": false,
+              "default": 2024,
+              "filterable": true
+            },
+            "isbn": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "format": {
+              "type": "enum",
+              "required": false,
+              "default": "paperback",
+              "filterable": true,
+              "options": [
+                "paperback",
+                "hardcover",
+                "ebook",
+                "audiobook"
+              ]
+            },
+            "pageCount": {
+              "type": "number",
+              "required": false,
+              "default": 48,
+              "filterable": true
+            },
+            "coverType": {
+              "type": "string",
+              "required": false,
+              "default": "soft",
+              "filterable": true
+            },
+            "ageGroup": {
+              "type": "string",
+              "required": true,
+              "default": "3-6",
+              "filterable": true
+            },
+            "illustrated": {
+              "type": "boolean",
+              "required": false,
+              "default": true,
+              "filterable": true
+            },
+            "educationalTopic": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            }
+          }
+        },
+        {
+          "slug": "academic-books",
+          "name": "Academic Books",
+          "specs": {
+            "author": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "publisher": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "language": {
+              "type": "string",
+              "required": false,
+              "default": "english",
+              "filterable": true
+            },
+            "publicationYear": {
+              "type": "number",
+              "required": false,
+              "default": 2024,
+              "filterable": true
+            },
+            "isbn": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "format": {
+              "type": "enum",
+              "required": false,
+              "default": "paperback",
+              "filterable": true,
+              "options": [
+                "paperback",
+                "hardcover",
+                "ebook",
+                "audiobook"
+              ]
+            },
+            "pageCount": {
+              "type": "number",
+              "required": false,
+              "default": 350,
+              "filterable": true
+            },
+            "coverType": {
+              "type": "string",
+              "required": false,
+              "default": "soft",
+              "filterable": true
+            },
+            "subject": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "educationLevel": {
+              "type": "string",
+              "required": false,
+              "default": "undergraduate",
+              "filterable": true
+            },
+            "edition": {
+              "type": "string",
+              "required": false,
+              "default": "1",
+              "filterable": true
+            }
+          }
+        },
+        {
+          "slug": "comics-manga",
+          "name": "Comics & Manga",
+          "specs": {
+            "author": {
+              "type": "string",
+              "required": true,
+              "default": "",
+              "filterable": true
+            },
+            "publisher": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "language": {
+              "type": "string",
+              "required": false,
+              "default": "english",
+              "filterable": true
+            },
+            "publicationYear": {
+              "type": "number",
+              "required": false,
+              "default": 2024,
+              "filterable": true
+            },
+            "isbn": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "format": {
+              "type": "enum",
+              "required": false,
+              "default": "paperback",
+              "filterable": true,
+              "options": [
+                "paperback",
+                "hardcover",
+                "ebook"
+              ]
+            },
+            "pageCount": {
+              "type": "number",
+              "required": false,
+              "default": 180,
+              "filterable": true
+            },
+            "coverType": {
+              "type": "string",
+              "required": false,
+              "default": "soft",
+              "filterable": true
+            },
+            "series": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "filterable": true
+            },
+            "volume": {
+              "type": "number",
+              "required": false,
+              "default": 1,
+              "filterable": true
+            },
+            "ageGroup": {
+              "type": "string",
+              "required": false,
+              "default": "teen",
+              "filterable": true
+            }
+          }
+        }
+      ],
+      "icon": "book-outline"
+    }
+  ]
+}

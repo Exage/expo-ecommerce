@@ -1,8 +1,21 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PlusIcon, PencilIcon, Trash2Icon, XIcon, ImageIcon } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { productApi } from "../lib/api";
+import { catalogApi, productApi } from "../lib/api";
 import { getStockStatusBadge } from "../lib/utils";
+
+const createDefaultSpecs = (specTemplate = {}, existingSpecs = {}) => {
+  return Object.entries(specTemplate).reduce((acc, [key, rule]) => {
+    if (existingSpecs[key] !== undefined) {
+      acc[key] = existingSpecs[key];
+      return acc;
+    }
+    acc[key] = rule.default;
+    return acc;
+  }, {});
+};
+
+const normalize = (value) => String(value || "").trim().toLowerCase();
 
 function ProductsPage() {
   const [showModal, setShowModal] = useState(false);
@@ -10,9 +23,11 @@ function ProductsPage() {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
+    subcategory: "",
     price: "",
     stock: "",
     description: "",
+    specs: {},
   });
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -24,6 +39,33 @@ function ProductsPage() {
     queryKey: ["products"],
     queryFn: productApi.getAll,
   });
+
+  const { data: catalogMeta } = useQuery({
+    queryKey: ["catalog-meta"],
+    queryFn: catalogApi.getMeta,
+  });
+
+  const categories = useMemo(() => catalogMeta?.categories ?? [], [catalogMeta]);
+
+  const selectedCategory = useMemo(() => {
+    return (
+      categories.find((category) => {
+        return normalize(category.name) === normalize(formData.category);
+      }) || null
+    );
+  }, [categories, formData.category]);
+
+  const subcategories = useMemo(() => selectedCategory?.subcategories ?? [], [selectedCategory]);
+
+  const selectedSubcategory = useMemo(() => {
+    return (
+      subcategories.find((subcategory) => {
+        return normalize(subcategory.name) === normalize(formData.subcategory);
+      }) || null
+    );
+  }, [subcategories, formData.subcategory]);
+
+  const selectedSpecsTemplate = selectedSubcategory?.specs ?? {};
 
   // creating, update, deleting
   const createProductMutation = useMutation({
@@ -57,25 +99,71 @@ function ProductsPage() {
     setFormData({
       name: "",
       category: "",
+      subcategory: "",
       price: "",
       stock: "",
       description: "",
+      specs: {},
     });
     setImages([]);
     setImagePreviews([]);
   };
 
   const handleEdit = (product) => {
+    const matchedCategory =
+      categories.find((category) => normalize(category.name) === normalize(product.category)) || null;
+    const matchedSubcategory =
+      matchedCategory?.subcategories.find(
+        (subcategory) => normalize(subcategory.name) === normalize(product.subcategory)
+      ) || matchedCategory?.subcategories?.[0];
+    const initialSpecs = createDefaultSpecs(matchedSubcategory?.specs || {}, product.specs || {});
+
     setEditingProduct(product);
     setFormData({
       name: product.name,
       category: product.category,
+      subcategory: matchedSubcategory?.name || product.subcategory || "",
       price: product.price.toString(),
       stock: product.stock.toString(),
       description: product.description,
+      specs: initialSpecs,
     });
     setImagePreviews(product.images);
     setShowModal(true);
+  };
+
+  const handleCategoryChange = (categoryName) => {
+    const category =
+      categories.find((item) => normalize(item.name) === normalize(categoryName)) || null;
+    const nextSubcategory = category?.subcategories?.[0] || null;
+
+    setFormData((prev) => ({
+      ...prev,
+      category: categoryName,
+      subcategory: nextSubcategory?.name || "",
+      specs: createDefaultSpecs(nextSubcategory?.specs || {}, {}),
+    }));
+  };
+
+  const handleSubcategoryChange = (subcategoryName) => {
+    const nextSubcategory =
+      subcategories.find((item) => normalize(item.name) === normalize(subcategoryName)) || null;
+
+    setFormData((prev) => ({
+      ...prev,
+      subcategory: subcategoryName,
+      specs: createDefaultSpecs(nextSubcategory?.specs || {}, prev.specs),
+    }));
+  };
+
+  const updateSpecValue = (key, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      specs: {
+        ...prev.specs,
+        [key]: value,
+      },
+    }));
   };
 
   const handleImageChange = (e) => {
@@ -105,6 +193,8 @@ function ProductsPage() {
     formDataToSend.append("price", formData.price);
     formDataToSend.append("stock", formData.stock);
     formDataToSend.append("category", formData.category);
+    formDataToSend.append("subcategory", formData.subcategory);
+    formDataToSend.append("specs", JSON.stringify(formData.specs || {}));
 
     // only append new images if they were selected
     if (images.length > 0) images.forEach((image) => formDataToSend.append("images", image));
@@ -149,7 +239,10 @@ function ProductsPage() {
                     <div className="flex items-start justify-between">
                       <div>
                         <h3 className="card-title">{product.name}</h3>
-                        <p className="text-base-content/70 text-sm">{product.category}</p>
+                        <p className="text-base-content/70 text-sm">
+                          {product.category}
+                          {product.subcategory ? ` / ${product.subcategory}` : ""}
+                        </p>
                       </div>
                       <div className={`badge ${status.class}`}>{status.text}</div>
                     </div>
@@ -230,14 +323,37 @@ function ProductsPage() {
                 <select
                   className="select select-bordered"
                   value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
                   required
                 >
                   <option value="">Select category</option>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Accessories">Accessories</option>
-                  <option value="Fashion">Fashion</option>
-                  <option value="Sports">Sports</option>
+                  {categories.map((category) => (
+                    <option key={category.slug} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-control">
+                <label className="label">
+                  <span>Subcategory</span>
+                </label>
+                <select
+                  className="select select-bordered"
+                  value={formData.subcategory}
+                  onChange={(e) => handleSubcategoryChange(e.target.value)}
+                  required
+                  disabled={!selectedCategory}
+                >
+                  <option value="">Select subcategory</option>
+                  {subcategories.map((subcategory) => (
+                    <option key={subcategory.slug} value={subcategory.name}>
+                      {subcategory.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -285,6 +401,107 @@ function ProductsPage() {
                 required
               />
             </div>
+
+            {selectedSubcategory && (
+              <div className="form-control flex flex-col gap-2">
+                <label className="label">
+                  <span className="font-semibold">Specifications</span>
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  {Object.entries(selectedSpecsTemplate).map(([key, rule]) => {
+                    const value = formData.specs[key];
+                    const label = key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
+
+                    if (rule.type === "boolean") {
+                      return (
+                        <label key={key} className="label cursor-pointer justify-start gap-3 p-3 rounded-lg bg-base-200">
+                          <input
+                            type="checkbox"
+                            className="toggle toggle-primary"
+                            checked={Boolean(value)}
+                            onChange={(e) => updateSpecValue(key, e.target.checked)}
+                          />
+                          <span>{label}</span>
+                        </label>
+                      );
+                    }
+
+                    if (rule.type === "enum") {
+                      return (
+                        <div key={key} className="form-control">
+                          <label className="label">
+                            <span>{label}</span>
+                          </label>
+                          <select
+                            className="select select-bordered"
+                            value={value ?? rule.default ?? ""}
+                            onChange={(e) => updateSpecValue(key, e.target.value)}
+                            required={Boolean(rule.required)}
+                          >
+                            {rule.options?.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      );
+                    }
+
+                    if (rule.type === "number") {
+                      return (
+                        <div key={key} className="form-control">
+                          <label className="label">
+                            <span>{label}</span>
+                          </label>
+                          <input
+                            type="number"
+                            step="any"
+                            className="input input-bordered"
+                            value={value ?? rule.default ?? ""}
+                            onChange={(e) => updateSpecValue(key, e.target.value)}
+                            required={Boolean(rule.required)}
+                          />
+                        </div>
+                      );
+                    }
+
+                    if (rule.type === "string[]" || rule.type === "number[]") {
+                      return (
+                        <div key={key} className="form-control">
+                          <label className="label">
+                            <span>{label}</span>
+                          </label>
+                          <input
+                            type="text"
+                            className="input input-bordered"
+                            placeholder="comma,separated,values"
+                            value={Array.isArray(value) ? value.join(", ") : value ?? ""}
+                            onChange={(e) => updateSpecValue(key, e.target.value)}
+                            required={Boolean(rule.required)}
+                          />
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div key={key} className="form-control">
+                        <label className="label">
+                          <span>{label}</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="input input-bordered"
+                          value={value ?? rule.default ?? ""}
+                          onChange={(e) => updateSpecValue(key, e.target.value)}
+                          required={Boolean(rule.required)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="form-control">
               <label className="label">

@@ -51,6 +51,9 @@ STRIPE_PUBLISHABLE_KEY=<YOUR_STRIPE_PUBLISHABLE_KEY>
 STRIPE_SECRET_KEY=<YOUR_STRIPE_SECRET_KEY>
 
 STRIPE_WEBHOOK_SECRET=<YOUR_STRIPE_WEBHOOK_SECRET>
+
+GEMINI_API_KEY=<YOUR_GEMINI_API_KEY>
+GEMINI_MODEL=gemini-2.0-flash
 ```
 
 ---
@@ -83,6 +86,19 @@ EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY=<YOUR_STRIPE_PUBLISHABLE_KEY>
 cd backend
 npm install
 npm run dev
+```
+
+### AI Product Assistant Endpoint
+
+`POST /api/products/assistant/suggest`
+
+Body example:
+
+```json
+{
+  "query": "Нужен недорогой смартфон с хорошей камерой",
+  "limit": 6
+}
 ```
 
 ---

@@ -4,4 +4,4 @@ node_modules
 db_creds
 .DS_Store
 
-node_modules
+docs

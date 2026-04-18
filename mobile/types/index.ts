@@ -5,11 +5,41 @@ export interface Product {
   price: number;
   stock: number;
   category: string;
+  subcategory?: string;
+  specs?: Record<string, unknown>;
   images: string[];
   averageRating: number;
   totalReviews: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface CatalogSpecRule {
+  type: "string" | "number" | "boolean" | "enum" | "string[]" | "number[]";
+  required: boolean;
+  default: string | number | boolean | string[] | number[];
+  filterable: boolean;
+  options?: string[];
+  unit?: string;
+}
+
+export interface CatalogSubcategory {
+  slug: string;
+  name: string;
+  specs: Record<string, CatalogSpecRule>;
+}
+
+export interface CatalogCategory {
+  slug: string;
+  name: string;
+  icon?: string;
+  subcategories: CatalogSubcategory[];
+}
+
+export interface CatalogMeta {
+  version: number;
+  topLevelProductFields: string[];
+  categories: CatalogCategory[];
 }
 
 export interface User {

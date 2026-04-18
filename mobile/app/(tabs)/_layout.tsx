@@ -59,6 +59,16 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen
+        name="assistant"
+        options={{
+          title: "AI",
+          tabBarStyle: { display: "none" },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbubble-ellipses" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",

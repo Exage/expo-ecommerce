@@ -22,6 +22,13 @@ export const productApi = {
   },
 };
 
+export const catalogApi = {
+  getMeta: async () => {
+    const { data } = await axiosInstance.get("/products/meta");
+    return data;
+  },
+};
+
 export const orderApi = {
   getAll: async () => {
     const { data } = await axiosInstance.get("/admin/orders");

@@ -4,8 +4,13 @@ dotenv.config({ quiet: true });
 
 export const ENV = {
   NODE_ENV: process.env.NODE_ENV,
+  DEV_USE_MOCK_PRODUCTS: ["1", "true", "yes", "on"].includes(
+    String(process.env.DEV_USE_MOCK_PRODUCTS || "").toLowerCase()
+  ),
   PORT: process.env.PORT,
   DB_URL: process.env.DB_URL,
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+  GEMINI_MODEL: process.env.GEMINI_MODEL,
   CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY,
   CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,

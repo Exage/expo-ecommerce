@@ -2,14 +2,34 @@ import cloudinary from "../config/cloudinary.js";
 import { Product } from "../models/product.model.js";
 import { Order } from "../models/order.model.js";
 import { User } from "../models/user.model.js";
+import { getAllProductsSource } from "../services/products.provider.js";
+import {
+  parseSpecsInput,
+  validateAndNormalizeProductDetails,
+} from "../utils/catalog-validation.js";
 
 export async function createProduct(req, res) {
   try {
-    const { name, description, price, stock, category } = req.body;
+    const { name, description, price, stock, category, subcategory } = req.body;
 
-    if (!name || !description || !price || !stock || !category) {
+    if (
+      !name ||
+      !description ||
+      price === undefined ||
+      price === null ||
+      stock === undefined ||
+      stock === null ||
+      !category
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
+
+    const parsedSpecs = parseSpecsInput(req.body.specs);
+    const { categoryName, subcategoryName, normalizedSpecs } = validateAndNormalizeProductDetails({
+      category,
+      subcategory,
+      specs: parsedSpecs,
+    });
 
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "At least one image is required" });
@@ -34,21 +54,29 @@ export async function createProduct(req, res) {
       description,
       price: parseFloat(price),
       stock: parseInt(stock),
-      category,
+      category: categoryName,
+      subcategory: subcategoryName,
+      specs: normalizedSpecs,
       images: imageUrls,
     });
 
     res.status(201).json(product);
   } catch (error) {
     console.error("Error creating product", error);
+    if (
+      error.message?.includes("Invalid") ||
+      error.message?.includes("Unknown specs keys") ||
+      error.message?.includes("specs must be")
+    ) {
+      return res.status(400).json({ message: error.message });
+    }
     res.status(500).json({ message: "Internal server error" });
   }
 }
 
 export async function getAllProducts(_, res) {
   try {
-    // -1 means in desc order: most recent products first
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await getAllProductsSource();
     res.status(200).json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -59,7 +87,7 @@ export async function getAllProducts(_, res) {
 export async function updateProduct(req, res) {
   try {
     const { id } = req.params;
-    const { name, description, price, stock, category } = req.body;
+    const { name, description, price, stock, category, subcategory } = req.body;
 
     const product = await Product.findById(id);
     if (!product) {
@@ -70,7 +98,30 @@ export async function updateProduct(req, res) {
     if (description) product.description = description;
     if (price !== undefined) product.price = parseFloat(price);
     if (stock !== undefined) product.stock = parseInt(stock);
-    if (category) product.category = category;
+
+    const nextCategory = category ?? product.category;
+    const nextSubcategory = subcategory ?? product.subcategory;
+    const specsProvided = req.body.specs !== undefined;
+    const taxonomyChanged = category !== undefined || subcategory !== undefined;
+
+    let nextSpecs = product.specs || {};
+
+    if (specsProvided) {
+      const incomingSpecs = parseSpecsInput(req.body.specs);
+      nextSpecs = taxonomyChanged ? incomingSpecs : { ...nextSpecs, ...incomingSpecs };
+    } else if (taxonomyChanged) {
+      nextSpecs = {};
+    }
+
+    const { categoryName, subcategoryName, normalizedSpecs } = validateAndNormalizeProductDetails({
+      category: nextCategory,
+      subcategory: nextSubcategory,
+      specs: nextSpecs,
+    });
+
+    product.category = categoryName;
+    product.subcategory = subcategoryName;
+    product.specs = normalizedSpecs;
 
     // handle image updates if new images are uploaded
     if (req.files && req.files.length > 0) {
@@ -92,6 +143,13 @@ export async function updateProduct(req, res) {
     res.status(200).json(product);
   } catch (error) {
     console.error("Error updating products:", error);
+    if (
+      error.message?.includes("Invalid") ||
+      error.message?.includes("Unknown specs keys") ||
+      error.message?.includes("specs must be")
+    ) {
+      return res.status(400).json({ message: error.message });
+    }
     res.status(500).json({ message: "Internal server error" });
   }
 }

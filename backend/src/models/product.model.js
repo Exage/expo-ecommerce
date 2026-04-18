@@ -25,6 +25,14 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    subcategory: {
+      type: String,
+      default: "",
+    },
+    specs: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
     images: [
       {
         type: String,
@@ -44,5 +52,7 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+productSchema.index({ category: 1, subcategory: 1, createdAt: -1 });
 
 export const Product = mongoose.model("Product", productSchema);

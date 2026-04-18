@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApi } from "@/lib/api";
-import { Cart } from "@/types";
+import { Cart, CartItem } from "@/types";
 
 const useCart = () => {
   const api = useApi();
@@ -17,6 +17,15 @@ const useCart = () => {
       return data.cart;
     },
   });
+
+  const safeItems = (cart?.items ?? []).filter((item): item is CartItem => Boolean(item?.product));
+
+  const safeCart = cart
+    ? {
+        ...cart,
+        items: safeItems,
+      }
+    : cart;
 
   const addToCartMutation = useMutation({
     mutationFn: async ({ productId, quantity = 1 }: { productId: string; quantity?: number }) => {
@@ -50,13 +59,12 @@ const useCart = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cart"] }),
   });
 
-  const cartTotal =
-    cart?.items.reduce((sum, item) => sum + item.product.price * item.quantity, 0) ?? 0;
+  const cartTotal = safeItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
-  const cartItemCount = cart?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+  const cartItemCount = safeItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return {
-    cart,
+    cart: safeCart,
     isLoading,
     isError,
     cartTotal,
