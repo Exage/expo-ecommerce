@@ -17,16 +17,16 @@ export function EmptyState({
   header,
 }: EmptyStateProps) {
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1 bg-background dark:bg-background-dark">
       {header && (
         <View className="px-6 pt-16 pb-5">
-          <Text className="text-text-primary text-3xl font-bold tracking-tight">{header}</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark text-3xl font-bold tracking-tight">{header}</Text>
         </View>
       )}
       <View className="flex-1 items-center justify-center px-6">
-        <Ionicons name={icon} size={iconSize} color="#666" />
-        <Text className="text-text-primary font-semibold text-xl mt-4">{title}</Text>
-        {description && <Text className="text-text-secondary text-center mt-2">{description}</Text>}
+        <Ionicons name={icon} size={iconSize} color="#64748B" />
+        <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">{title}</Text>
+        {description && <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">{description}</Text>}
       </View>
     </View>
   );

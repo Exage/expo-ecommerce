@@ -130,9 +130,9 @@ function AddressesScreen() {
 
       {addresses.length === 0 ? (
         <View className="flex-1 items-center justify-center px-6">
-          <Ionicons name="location-outline" size={80} color="#666" />
-          <Text className="text-text-primary font-semibold text-xl mt-4">No addresses yet</Text>
-          <Text className="text-text-secondary text-center mt-2">
+          <Ionicons name="location-outline" size={80} color="#64748B" />
+          <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">No addresses yet</Text>
+          <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
             Add your first delivery address
           </Text>
           <TouchableOpacity
@@ -167,7 +167,7 @@ function AddressesScreen() {
               onPress={handleAddAddress}
             >
               <View className="flex-row items-center">
-                <Ionicons name="add-circle-outline" size={24} color="#121212" />
+                <Ionicons name="add-circle-outline" size={24} color="#F8FAFC" />
                 <Text className="text-background font-bold text-base ml-2">Add New Address</Text>
               </View>
             </TouchableOpacity>
@@ -196,10 +196,10 @@ function ErrorUI() {
       <AddressesHeader />
       <View className="flex-1 items-center justify-center px-6">
         <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-        <Text className="text-text-primary font-semibold text-xl mt-4">
+        <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">
           Failed to load addresses
         </Text>
-        <Text className="text-text-secondary text-center mt-2">
+        <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
           Please check your connection and try again
         </Text>
       </View>
@@ -212,8 +212,8 @@ function LoadingUI() {
     <SafeScreen>
       <AddressesHeader />
       <View className="flex-1 items-center justify-center px-6">
-        <ActivityIndicator size="large" color="#00D9FF" />
-        <Text className="text-text-secondary mt-4">Loading addresses...</Text>
+        <ActivityIndicator size="large" color="#1DB954" />
+        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading addresses...</Text>
       </View>
     </SafeScreen>
   );

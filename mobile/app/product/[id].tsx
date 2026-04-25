@@ -15,10 +15,14 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
+import { useColorScheme } from "nativewind";
 
 const { width } = Dimensions.get("window");
 
 const ProductDetailScreen = () => {
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: product, isError, isLoading } = useProduct(id);
   const { addToCart, isAddingToCart } = useCart();
@@ -73,7 +77,7 @@ const ProductDetailScreen = () => {
             <Ionicons
               name={isInWishlist(product._id) ? "heart" : "heart-outline"}
               size={24}
-              color={isInWishlist(product._id) ? "#121212" : "#FFFFFF"}
+              color={isInWishlist(product._id) ? "#F8FAFC" : "#FFFFFF"}
             />
           )}
         </TouchableOpacity>
@@ -125,16 +129,16 @@ const ProductDetailScreen = () => {
           </View>
 
           {/* Product Name */}
-          <Text className="text-text-primary text-3xl font-bold mb-3">{product.name}</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark text-3xl font-bold mb-3">{product.name}</Text>
 
           {/* Rating & Reviews */}
           <View className="flex-row items-center mb-4">
-            <View className="flex-row items-center bg-surface px-3 py-2 rounded-full">
+            <View className="flex-row items-center bg-surface dark:bg-surface-dark px-3 py-2 rounded-full">
               <Ionicons name="star" size={16} color="#FFC107" />
-              <Text className="text-text-primary font-bold ml-1 mr-2">
+              <Text className="text-text-primary dark:text-text-primary-dark font-bold ml-1 mr-2">
                 {product.averageRating.toFixed(1)}
               </Text>
-              <Text className="text-text-secondary text-sm">({product.totalReviews} reviews)</Text>
+              <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">({product.totalReviews} reviews)</Text>
             </View>
             {inStock ? (
               <View className="ml-3 flex-row items-center">
@@ -158,19 +162,23 @@ const ProductDetailScreen = () => {
 
           {/* Quantity */}
           <View className="mb-6">
-            <Text className="text-text-primary text-lg font-bold mb-3">Quantity</Text>
+            <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-3">Quantity</Text>
 
             <View className="flex-row items-center">
               <TouchableOpacity
-                className="bg-surface rounded-full w-12 h-12 items-center justify-center"
+                className="bg-surface dark:bg-surface-dark rounded-full w-12 h-12 items-center justify-center"
                 onPress={() => setQuantity(Math.max(1, quantity - 1))}
                 activeOpacity={0.7}
                 disabled={!inStock}
               >
-                <Ionicons name="remove" size={24} color={inStock ? "#FFFFFF" : "#666"} />
+                <Ionicons
+                  name="remove"
+                  size={24}
+                  color={inStock ? (isDark ? "#FFFFFF" : "#0F172A") : "#64748B"}
+                />
               </TouchableOpacity>
 
-              <Text className="text-text-primary text-xl font-bold mx-6">{quantity}</Text>
+              <Text className="text-text-primary dark:text-text-primary-dark text-xl font-bold mx-6">{quantity}</Text>
 
               <TouchableOpacity
                 className="bg-primary rounded-full w-12 h-12 items-center justify-center"
@@ -181,7 +189,7 @@ const ProductDetailScreen = () => {
                 <Ionicons
                   name="add"
                   size={24}
-                  color={!inStock || quantity >= product.stock ? "#666" : "#121212"}
+                  color={!inStock || quantity >= product.stock ? "#64748B" : "#F8FAFC"}
                 />
               </TouchableOpacity>
             </View>
@@ -193,37 +201,37 @@ const ProductDetailScreen = () => {
 
           {/* Description */}
           <View className="mb-8">
-            <Text className="text-text-primary text-lg font-bold mb-3">Description</Text>
-            <Text className="text-text-secondary text-base leading-6">{product.description}</Text>
+            <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-3">Description</Text>
+            <Text className="text-text-secondary dark:text-text-secondary-dark text-base leading-6">{product.description}</Text>
           </View>
         </View>
       </ScrollView>
 
       {/* Bottom Action Bar */}
-      <View className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-xl border-t border-surface px-6 py-4 pb-8">
+      <View className="absolute bottom-0 left-0 right-0 bg-background/95 dark:bg-background-dark/95 backdrop-blur-xl border-t border-surface dark:border-surface-dark px-6 py-4 pb-8">
         <View className="flex-row items-center gap-3">
           <View className="flex-1">
-            <Text className="text-text-secondary text-sm mb-1">Total Price</Text>
+            <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mb-1">Total Price</Text>
             <Text className="text-primary text-2xl font-bold">
               ${(product.price * quantity).toFixed(2)}
             </Text>
           </View>
           <TouchableOpacity
             className={`rounded-2xl px-8 py-4 flex-row items-center ${
-              !inStock ? "bg-surface" : "bg-primary"
+              !inStock ? "bg-surface dark:bg-surface-dark" : "bg-primary"
             }`}
             activeOpacity={0.8}
             onPress={handleAddToCart}
             disabled={!inStock || isAddingToCart}
           >
             {isAddingToCart ? (
-              <ActivityIndicator size="small" color="#121212" />
+              <ActivityIndicator size="small" color="#F8FAFC" />
             ) : (
               <>
-                <Ionicons name="cart" size={24} color={!inStock ? "#666" : "#121212"} />
+                <Ionicons name="cart" size={24} color={!inStock ? "#64748B" : "#F8FAFC"} />
                 <Text
                   className={`font-bold text-lg ml-2 ${
-                    !inStock ? "text-text-secondary" : "text-background"
+                    !inStock ? "text-text-secondary dark:text-text-secondary-dark" : "text-background"
                   }`}
                 >
                   {!inStock ? "Out of Stock" : "Add to Cart"}
@@ -244,8 +252,8 @@ function ErrorUI() {
     <SafeScreen>
       <View className="flex-1 items-center justify-center px-6">
         <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-        <Text className="text-text-primary font-semibold text-xl mt-4">Product not found</Text>
-        <Text className="text-text-secondary text-center mt-2">
+        <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">Product not found</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
           This product may have been removed or doesn&apos;t exist
         </Text>
         <TouchableOpacity
@@ -264,7 +272,7 @@ function LoadingUI() {
     <SafeScreen>
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size="large" color="#1DB954" />
-        <Text className="text-text-secondary mt-4">Loading product...</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading product...</Text>
       </View>
     </SafeScreen>
   );

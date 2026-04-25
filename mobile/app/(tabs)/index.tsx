@@ -6,6 +6,7 @@ import useProducts from "@/hooks/useProducts";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useMemo, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Image } from "react-native";
+import { useColorScheme } from "nativewind";
 
 const CATEGORY_IMAGES = {
   Electronics: require("@/assets/images/electronics.png"),
@@ -18,6 +19,9 @@ const ShopScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSubcategory, setSelectedSubcategory] = useState("All");
+  const { colorScheme } = useColorScheme();
+  const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
+  const mutedIconColor = colorScheme === "dark" ? "#B3B3B3" : "#64748B";
 
   const { data: products, isLoading, isError } = useProducts();
   const { data: catalogMeta } = useCatalogMeta();
@@ -106,22 +110,25 @@ const ShopScreen = () => {
         <View className="px-6 pb-4 pt-6">
           <View className="flex-row items-center justify-between mb-6">
             <View>
-              <Text className="text-text-primary text-3xl font-bold tracking-tight">Shop</Text>
-              <Text className="text-text-secondary text-sm mt-1">Browse all products</Text>
+              <Text className="text-text-primary dark:text-text-primary-dark text-3xl font-bold tracking-tight">Shop</Text>
+              <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mt-1">Browse all products</Text>
             </View>
 
-            <TouchableOpacity className="bg-surface/50 p-3 rounded-full" activeOpacity={0.7}>
-              <Ionicons name="options-outline" size={22} color={"#fff"} />
+            <TouchableOpacity
+              className="bg-surface/50 dark:bg-surface-dark/50 p-3 rounded-full"
+              activeOpacity={0.7}
+            >
+              <Ionicons name="options-outline" size={22} color={iconColor} />
             </TouchableOpacity>
           </View>
 
           {/* SEARCH BAR */}
-          <View className="bg-surface flex-row items-center px-5 py-4 rounded-2xl">
-            <Ionicons color={"#666"} size={22} name="search" />
+          <View className="bg-surface dark:bg-surface-dark flex-row items-center px-5 py-4 rounded-2xl">
+            <Ionicons color={mutedIconColor} size={22} name="search" />
             <TextInput
               placeholder="Search for products"
-              placeholderTextColor={"#666"}
-              className="flex-1 ml-3 text-base text-text-primary"
+              placeholderTextColor={mutedIconColor}
+              className="flex-1 ml-3 text-base text-text-primary dark:text-text-primary-dark"
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
@@ -146,7 +153,7 @@ const ShopScreen = () => {
                     setSelectedCategory(categoryName);
                     setSelectedSubcategory("All");
                   }}
-                  className={`mr-3 rounded-2xl size-20 overflow-hidden items-center justify-center ${isSelected ? "bg-primary" : "bg-surface"}`}
+                  className={`mr-3 rounded-2xl size-20 overflow-hidden items-center justify-center ${isSelected ? "bg-primary" : "bg-surface dark:bg-surface-dark"}`}
                 >
                   {categoryImage ? (
                     <Image source={categoryImage} className="size-10" resizeMode="contain" />
@@ -154,12 +161,12 @@ const ShopScreen = () => {
                     <Ionicons
                       name={iconName as keyof typeof Ionicons.glyphMap}
                       size={28}
-                      color={isSelected ? "#121212" : "#fff"}
+                      color={isSelected ? "#F8FAFC" : iconColor}
                     />
                   )}
                   <Text
                     numberOfLines={1}
-                    className={`text-xs mt-1 px-2 ${isSelected ? "text-background" : "text-text-primary"}`}
+                    className={`text-xs mt-1 px-2 ${isSelected ? "text-background" : "text-text-primary dark:text-text-primary-dark"}`}
                   >
                     {categoryName}
                   </Text>
@@ -183,9 +190,9 @@ const ShopScreen = () => {
                   <TouchableOpacity
                     key={subcategoryName}
                     onPress={() => setSelectedSubcategory(subcategoryName)}
-                    className={`mr-2 px-4 py-2 rounded-full ${isSelected ? "bg-primary" : "bg-surface"}`}
+                    className={`mr-2 px-4 py-2 rounded-full ${isSelected ? "bg-primary" : "bg-surface dark:bg-surface-dark"}`}
                   >
-                    <Text className={`text-sm ${isSelected ? "text-background" : "text-text-primary"}`}>
+                    <Text className={`text-sm ${isSelected ? "text-background" : "text-text-primary dark:text-text-primary-dark"}`}>
                       {subcategoryName}
                     </Text>
                   </TouchableOpacity>
@@ -197,8 +204,8 @@ const ShopScreen = () => {
 
         <View className="px-6 mb-6">
           <View className="flex-row items-center justify-between mb-4">
-            <Text className="text-text-primary text-lg font-bold">Products</Text>
-            <Text className="text-text-secondary text-sm">{filteredProducts.length} items</Text>
+            <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold">Products</Text>
+            <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">{filteredProducts.length} items</Text>
           </View>
 
           {/* PRODUCTS GRID */}

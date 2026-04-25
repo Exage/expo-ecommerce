@@ -13,10 +13,10 @@ export function ErrorState({
   onRetry,
 }: ErrorStateProps) {
   return (
-    <View className="flex-1 bg-background items-center justify-center px-6">
+    <View className="flex-1 bg-background dark:bg-background-dark items-center justify-center px-6">
       <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-      <Text className="text-text-primary font-semibold text-xl mt-4">{title}</Text>
-      <Text className="text-text-secondary text-center mt-2">{description}</Text>
+      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">{title}</Text>
+      <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">{description}</Text>
       {onRetry && (
         <TouchableOpacity onPress={onRetry} className="mt-4 bg-primary px-6 py-3 rounded-xl">
           <Text className="text-background font-semibold">Try Again</Text>

@@ -1,29 +1,39 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // NOTE: Update this to include the paths to all files that contain Nativewind classes.
+  darkMode: "class",
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#1DB954", // spotify green
+          DEFAULT: "#1DB954",
           light: "#1ED760",
           dark: "#1AA34A",
         },
         background: {
-          DEFAULT: "#121212", // dark background
-          light: "#181818",
-          lighter: "#282828",
+          DEFAULT: "#F8FAFC",
+          light: "#EEF2F7",
+          lighter: "#E2E8F0",
+          dark: "#121212",
+          "dark-light": "#181818",
+          "dark-lighter": "#282828",
         },
         surface: {
-          DEFAULT: "#282828",
-          light: "#3E3E3E",
+          DEFAULT: "#FFFFFF",
+          light: "#F1F5F9",
+          lighter: "#E2E8F0",
+          dark: "#282828",
+          "dark-light": "#3E3E3E",
+          "dark-lighter": "#4A4A4A",
         },
         text: {
-          primary: "#FFFFFF",
-          secondary: "#B3B3B3",
-          tertiary: "#6A6A6A",
+          primary: "#0F172A",
+          secondary: "#475569",
+          tertiary: "#94A3B8",
+          "primary-dark": "#FFFFFF",
+          "secondary-dark": "#B3B3B3",
+          "tertiary-dark": "#6A6A6A",
         },
         accent: {
           DEFAULT: "#1DB954",

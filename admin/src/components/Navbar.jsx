@@ -4,8 +4,10 @@ import { useLocation } from "react-router";
 import {
   ClipboardListIcon,
   HomeIcon,
+  MoonIcon,
   PanelLeftIcon,
   ShoppingBagIcon,
+  SunIcon,
   UsersIcon,
 } from "lucide-react";
 
@@ -17,7 +19,7 @@ export const NAVIGATION = [
   { name: "Customers", path: "/customers", icon: <UsersIcon className="size-5" /> },
 ];
 
-function Navbar() {
+function Navbar({ isDark, onThemeToggle }) {
   const location = useLocation();
 
   return (
@@ -32,7 +34,16 @@ function Navbar() {
         </h1>
       </div>
 
-      <div className="mr-5">
+      <div className="flex items-center">
+        <button
+          type="button"
+          className="btn btn-ghost btn-circle mr-2"
+          onClick={onThemeToggle}
+          aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+          title={isDark ? "Switch to light theme" : "Switch to dark theme"}
+        >
+          {isDark ? <SunIcon className="size-5" /> : <MoonIcon className="size-5" />}
+        </button>
         <UserButton />
       </div>
     </div>

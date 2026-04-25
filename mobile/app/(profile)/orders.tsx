@@ -9,8 +9,12 @@ import { Image } from "expo-image";
 import { router } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useColorScheme } from "nativewind";
 
 function OrdersScreen() {
+  const { colorScheme } = useColorScheme();
+  const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
+
   const { data: orders, isLoading, isError } = useOrders();
   const { createReviewAsync, isCreatingReview } = useReviews();
 
@@ -64,11 +68,11 @@ function OrdersScreen() {
   return (
     <SafeScreen>
       {/* Header */}
-      <View className="px-6 pb-5 border-b border-surface flex-row items-center">
+      <View className="px-6 pb-5 border-b border-surface dark:border-surface-dark flex-row items-center">
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={28} color={iconColor} />
         </TouchableOpacity>
-        <Text className="text-text-primary text-2xl font-bold">My Orders</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">My Orders</Text>
       </View>
 
       {isLoading ? (
@@ -89,7 +93,7 @@ function OrdersScreen() {
               const firstImage = order.orderItems[0]?.image || "";
 
               return (
-                <View key={order._id} className="bg-surface rounded-3xl p-5 mb-4">
+                <View key={order._id} className="bg-surface dark:bg-surface-dark rounded-3xl p-5 mb-4">
                   <View className="flex-row mb-4">
                     <View className="relative">
                       <Image
@@ -109,10 +113,10 @@ function OrdersScreen() {
                     </View>
 
                     <View className="flex-1 ml-4">
-                      <Text className="text-text-primary font-bold text-base mb-1">
+                      <Text className="text-text-primary dark:text-text-primary-dark font-bold text-base mb-1">
                         Order #{order._id.slice(-8).toUpperCase()}
                       </Text>
-                      <Text className="text-text-secondary text-sm mb-2">
+                      <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mb-2">
                         {formatDate(order.createdAt)}
                       </Text>
                       <View
@@ -133,16 +137,16 @@ function OrdersScreen() {
                   {order.orderItems.map((item, index) => (
                     <Text
                       key={item._id}
-                      className="text-text-secondary text-sm flex-1"
+                      className="text-text-secondary dark:text-text-secondary-dark text-sm flex-1"
                       numberOfLines={1}
                     >
                       {item.name} × {item.quantity}
                     </Text>
                   ))}
 
-                  <View className="border-t border-background-lighter pt-3 flex-row justify-between items-center">
+                  <View className="border-t border-background-lighter dark:border-background-dark-lighter pt-3 flex-row justify-between items-center">
                     <View>
-                      <Text className="text-text-secondary text-xs mb-1">{totalItems} items</Text>
+                      <Text className="text-text-secondary dark:text-text-secondary-dark text-xs mb-1">{totalItems} items</Text>
                       <Text className="text-primary font-bold text-xl">
                         ${order.totalPrice.toFixed(2)}
                       </Text>
@@ -160,7 +164,7 @@ function OrdersScreen() {
                           activeOpacity={0.7}
                           onPress={() => handleOpenRating(order)}
                         >
-                          <Ionicons name="star" size={18} color="#121212" />
+                          <Ionicons name="star" size={18} color="#F8FAFC" />
                           <Text className="text-background font-bold text-sm ml-2">
                             Leave Rating
                           </Text>
@@ -193,8 +197,8 @@ export default OrdersScreen;
 function LoadingUI() {
   return (
     <View className="flex-1 items-center justify-center">
-      <ActivityIndicator size="large" color="#00D9FF" />
-      <Text className="text-text-secondary mt-4">Loading orders...</Text>
+      <ActivityIndicator size="large" color="#1DB954" />
+      <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading orders...</Text>
     </View>
   );
 }
@@ -203,8 +207,8 @@ function ErrorUI() {
   return (
     <View className="flex-1 items-center justify-center px-6">
       <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-      <Text className="text-text-primary font-semibold text-xl mt-4">Failed to load orders</Text>
-      <Text className="text-text-secondary text-center mt-2">
+      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">Failed to load orders</Text>
+      <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
         Please check your connection and try again
       </Text>
     </View>
@@ -214,9 +218,9 @@ function ErrorUI() {
 function EmptyUI() {
   return (
     <View className="flex-1 items-center justify-center px-6">
-      <Ionicons name="receipt-outline" size={80} color="#666" />
-      <Text className="text-text-primary font-semibold text-xl mt-4">No orders yet</Text>
-      <Text className="text-text-secondary text-center mt-2">
+      <Ionicons name="receipt-outline" size={80} color="#64748B" />
+      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">No orders yet</Text>
+      <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
         Your order history will appear here
       </Text>
     </View>

@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
 import { ScrollView, Switch, Text, TouchableOpacity, View } from "react-native";
+import { useColorScheme } from "nativewind";
 
 type SecurityOption = {
   id: string;
@@ -14,6 +15,9 @@ type SecurityOption = {
 };
 
 function PrivacyAndSecurityScreen() {
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [biometricEnabled, setBiometricEnabled] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(true);
@@ -126,14 +130,20 @@ function PrivacyAndSecurityScreen() {
     }
   };
 
+  const iconColor = isDark ? "#FFFFFF" : "#0F172A";
+  const mutedIconColor = isDark ? "#B3B3B3" : "#64748B";
+  const switchTrackColor = { false: isDark ? "#2A2A2A" : "#CBD5E1", true: "#1DB954" };
+
   return (
     <SafeScreen>
       {/* HEADER */}
-      <View className="px-6 pb-5 border-b border-surface flex-row items-center">
+      <View className="px-6 pb-5 border-b border-surface dark:border-surface-dark flex-row items-center">
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#fff" />
+          <Ionicons name="arrow-back" size={28} color={iconColor} />
         </TouchableOpacity>
-        <Text className="text-text-primary text-2xl font-bold">Privacy & Security</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">
+          Privacy & Security
+        </Text>
       </View>
 
       <ScrollView
@@ -143,12 +153,12 @@ function PrivacyAndSecurityScreen() {
       >
         {/* SECURITY SETTING */}
         <View className="px-6 pt-6">
-          <Text className="text-text-primary text-lg font-bold mb-4">Security</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-4">Security</Text>
 
           {securitySettings.map((setting) => (
             <TouchableOpacity
               key={setting.id}
-              className="bg-surface rounded-2xl p-4 mb-3"
+              className="bg-surface dark:bg-surface-dark rounded-2xl p-4 mb-3"
               activeOpacity={setting.type === "toggle" ? 1 : 0.7}
             >
               <View className="flex-row items-center">
@@ -157,10 +167,10 @@ function PrivacyAndSecurityScreen() {
                 </View>
 
                 <View className="flex-1">
-                  <Text className="text-text-primary font-bold text-base mb-1">
+                  <Text className="text-text-primary dark:text-text-primary-dark font-bold text-base mb-1">
                     {setting.title}
                   </Text>
-                  <Text className="text-text-secondary text-sm">{setting.description}</Text>
+                  <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">{setting.description}</Text>
                 </View>
 
                 {setting.type === "toggle" ? (
@@ -168,12 +178,12 @@ function PrivacyAndSecurityScreen() {
                     value={setting.value}
                     onValueChange={(value) => handleToggle(setting.id, value)}
                     thumbColor="#FFFFFF"
-                    trackColor={{ false: "#2A2A2A", true: "#1DB954" }}
+                    trackColor={switchTrackColor}
 
                     // ios_backgroundColor={"purple"}
                   />
                 ) : (
-                  <Ionicons name="chevron-forward" size={20} color="#666" />
+                  <Ionicons name="chevron-forward" size={20} color={mutedIconColor} />
                 )}
               </View>
             </TouchableOpacity>
@@ -182,25 +192,25 @@ function PrivacyAndSecurityScreen() {
 
         {/* Privacy Section */}
         <View className="px-6 pt-4">
-          <Text className="text-text-primary text-lg font-bold mb-4">Privacy</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-4">Privacy</Text>
 
           {privacySettings.map((setting) => (
             <View key={setting.id}>
-              <View className="bg-surface rounded-2xl p-4 mb-3">
+              <View className="bg-surface dark:bg-surface-dark rounded-2xl p-4 mb-3">
                 <View className="flex-row items-center">
                   <View className="bg-primary/20 rounded-full w-12 h-12 items-center justify-center mr-4">
                     <Ionicons name={setting.icon as any} size={24} color="#1DB954" />
                   </View>
                   <View className="flex-1">
-                    <Text className="text-text-primary font-bold text-base mb-1">
+                    <Text className="text-text-primary dark:text-text-primary-dark font-bold text-base mb-1">
                       {setting.title}
                     </Text>
-                    <Text className="text-text-secondary text-sm">{setting.description}</Text>
+                    <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">{setting.description}</Text>
                   </View>
                   <Switch
                     value={setting.value}
                     onValueChange={(value) => handleToggle(setting.id, value)}
-                    trackColor={{ false: "#2A2A2A", true: "#1DB954" }}
+                    trackColor={switchTrackColor}
                     thumbColor="#FFFFFF"
                   />
                 </View>
@@ -211,12 +221,12 @@ function PrivacyAndSecurityScreen() {
 
         {/* ACCOUNT SECTION */}
         <View className="px-6 pt-4">
-          <Text className="text-text-primary text-lg font-bold mb-4">Account</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-4">Account</Text>
 
           {accountSettings.map((setting) => (
             <TouchableOpacity
               key={setting.id}
-              className="bg-surface rounded-2xl p-4 mb-3"
+              className="bg-surface dark:bg-surface-dark rounded-2xl p-4 mb-3"
               activeOpacity={0.7}
             >
               <View className="flex-row items-center">
@@ -224,12 +234,12 @@ function PrivacyAndSecurityScreen() {
                   <Ionicons name={setting.icon as any} size={24} color="#1DB954" />
                 </View>
                 <View className="flex-1">
-                  <Text className="text-text-primary font-bold text-base mb-1">
+                  <Text className="text-text-primary dark:text-text-primary-dark font-bold text-base mb-1">
                     {setting.title}
                   </Text>
-                  <Text className="text-text-secondary text-sm">{setting.description}</Text>
+                  <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">{setting.description}</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={20} color="#666" />
+                <Ionicons name="chevron-forward" size={20} color={mutedIconColor} />
               </View>
             </TouchableOpacity>
           ))}
@@ -238,7 +248,7 @@ function PrivacyAndSecurityScreen() {
         {/* DELETE ACC BTN */}
         <View className="px-6 pt-4">
           <TouchableOpacity
-            className="bg-surface rounded-2xl p-5 flex-row items-center justify-between border-2 border-red-500/20"
+            className="bg-surface dark:bg-surface-dark rounded-2xl p-5 flex-row items-center justify-between border-2 border-red-500/20"
             activeOpacity={0.7}
           >
             <View className="flex-row items-center">
@@ -247,7 +257,7 @@ function PrivacyAndSecurityScreen() {
               </View>
               <View>
                 <Text className="text-red-500 font-bold text-base mb-1">Delete Account</Text>
-                <Text className="text-text-secondary text-sm">Permanently delete your account</Text>
+                <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">Permanently delete your account</Text>
               </View>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#EF4444" />
@@ -258,7 +268,7 @@ function PrivacyAndSecurityScreen() {
         <View className="px-6 pt-6 pb-4">
           <View className="bg-primary/10 rounded-2xl p-4 flex-row">
             <Ionicons name="information-circle-outline" size={24} color="#1DB954" />
-            <Text className="text-text-secondary text-sm ml-3 flex-1">
+            <Text className="text-text-secondary dark:text-text-secondary-dark text-sm ml-3 flex-1">
               We take your privacy seriously. Your data is encrypted and stored securely. You can
               manage your privacy settings at any time.
             </Text>

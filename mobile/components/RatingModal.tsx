@@ -36,15 +36,15 @@ const RatingModal = ({
       <TouchableWithoutFeedback onPress={onClose}>
         <View className="flex-1 bg-black/70 items-center justify-center px-4">
           <TouchableWithoutFeedback>
-            <View className="bg-surface rounded-3xl p-6 w-full max-w-md max-h-[80%]">
+            <View className="bg-surface dark:bg-surface-dark rounded-3xl p-6 w-full max-w-md max-h-[80%]">
               <View className="items-center mb-4">
                 <View className="bg-primary/20 rounded-full w-16 h-16 items-center justify-center mb-3">
                   <Ionicons name="star" size={32} color="#1DB954" />
                 </View>
-                <Text className="text-text-primary text-2xl font-bold mb-1">
+                <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold mb-1">
                   Rate Your Products
                 </Text>
-                <Text className="text-text-secondary text-center text-sm">
+                <Text className="text-text-secondary dark:text-text-secondary-dark text-center text-sm">
                   Rate each product from your order
                 </Text>
               </View>
@@ -57,7 +57,7 @@ const RatingModal = ({
                   return (
                     <View
                       key={item._id}
-                      className={`bg-background-lighter rounded-2xl p-4 ${
+                      className={`bg-background-lighter dark:bg-background-dark-lighter rounded-2xl p-4 ${
                         index < order.orderItems.length - 1 ? "mb-3" : ""
                       }`}
                     >
@@ -68,12 +68,12 @@ const RatingModal = ({
                         />
                         <View className="flex-1 ml-3">
                           <Text
-                            className="text-text-primary font-semibold text-sm"
+                            className="text-text-primary dark:text-text-primary-dark font-semibold text-sm"
                             numberOfLines={2}
                           >
                             {item.name}
                           </Text>
-                          <Text className="text-text-secondary text-xs mt-1">
+                          <Text className="text-text-secondary dark:text-text-secondary-dark text-xs mt-1">
                             Qty: {item.quantity} • ${item.price.toFixed(2)}
                           </Text>
                         </View>
@@ -90,7 +90,7 @@ const RatingModal = ({
                             <Ionicons
                               name={star <= currentRating ? "star" : "star-outline"}
                               size={32}
-                              color={star <= currentRating ? "#1DB954" : "#666"}
+                              color={star <= currentRating ? "#1DB954" : "#64748B"}
                             />
                           </TouchableOpacity>
                         ))}
@@ -108,18 +108,18 @@ const RatingModal = ({
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
-                    <ActivityIndicator size="small" color="#121212" />
+                    <ActivityIndicator size="small" color="#F8FAFC" />
                   ) : (
                     <Text className="text-background font-bold text-base">Submit All Ratings</Text>
                   )}
                 </TouchableOpacity>
                 <TouchableOpacity
-                  className="bg-surface-lighter rounded-2xl py-4 items-center border border-background-lighter"
+                  className="bg-surface-lighter dark:bg-surface-dark-lighter rounded-2xl py-4 items-center border border-background-lighter dark:border-background-dark-lighter"
                   activeOpacity={0.7}
                   onPress={onClose}
                   disabled={isSubmitting}
                 >
-                  <Text className="text-text-secondary font-bold text-base">Cancel</Text>
+                  <Text className="text-text-secondary dark:text-text-secondary-dark font-bold text-base">Cancel</Text>
                 </TouchableOpacity>
               </View>
             </View>

@@ -5,11 +5,11 @@ interface LoadingStateProps {
   color?: string;
 }
 
-const LoadingState = ({ message = "Loading...", color = "#00D9FF" }: LoadingStateProps) => {
+const LoadingState = ({ message = "Loading...", color = "#1DB954" }: LoadingStateProps) => {
   return (
-    <View className="flex-1 bg-background items-center justify-center">
+    <View className="flex-1 bg-background dark:bg-background-dark items-center justify-center">
       <ActivityIndicator size={"large"} color={color} />
-      <Text className="text-text-secondary mt-4">{message}</Text>
+      <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">{message}</Text>
     </View>
   );
 };

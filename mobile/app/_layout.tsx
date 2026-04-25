@@ -5,6 +5,9 @@ import { ClerkProvider } from "@clerk/clerk-expo";
 import { tokenCache } from "@clerk/clerk-expo/token-cache";
 import * as Sentry from "@sentry/react-native";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import { useColorScheme } from "nativewind";
+import { useEffect, type ReactNode } from "react";
+import { getStoredTheme } from "@/lib/theme";
 
 Sentry.init({
   dsn: "https://fb6731b90610cc08333e6c16ffac5724@o4509813037137920.ingest.de.sentry.io/4510451611205712",
@@ -55,12 +58,35 @@ const queryClient = new QueryClient({
   }),
 });
 
+function ThemeBootstrap({ children }: { children: ReactNode }) {
+  const { setColorScheme } = useColorScheme();
+
+  useEffect(() => {
+    let isMounted = true;
+
+    (async () => {
+      const savedTheme = await getStoredTheme();
+      if (isMounted && savedTheme) {
+        setColorScheme(savedTheme);
+      }
+    })();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [setColorScheme]);
+
+  return <>{children}</>;
+}
+
 export default Sentry.wrap(function RootLayout() {
   return (
     <ClerkProvider tokenCache={tokenCache}>
       <QueryClientProvider client={queryClient}>
         <StripeProvider publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}>
-          <Stack screenOptions={{ headerShown: false }} />
+          <ThemeBootstrap>
+            <Stack screenOptions={{ headerShown: false }} />
+          </ThemeBootstrap>
         </StripeProvider>
       </QueryClientProvider>
     </ClerkProvider>

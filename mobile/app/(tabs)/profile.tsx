@@ -1,10 +1,12 @@
 import SafeScreen from "@/components/SafeScreen";
+import { setStoredTheme } from "@/lib/theme";
 import { useAuth, useUser } from "@clerk/clerk-expo";
 
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Switch, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useColorScheme } from "nativewind";
 
 const MENU_ITEMS = [
   { id: 1, icon: "person-outline", title: "Edit Profile", color: "#3B82F6", action: "/profile" },
@@ -16,10 +18,21 @@ const MENU_ITEMS = [
 const ProfileScreen = () => {
   const { signOut } = useAuth();
   const { user } = useUser();
+  const { colorScheme, setColorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+  const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
+  const mutedIconColor = colorScheme === "dark" ? "#B3B3B3" : "#64748B";
+  const switchTrackColor = { false: isDark ? "#2A2A2A" : "#CBD5E1", true: "#1DB954" };
 
   const handleMenuPress = (action: (typeof MENU_ITEMS)[number]["action"]) => {
     if (action === "/profile") return;
     router.push(action);
+  };
+
+  const handleThemeToggle = async (enabled: boolean) => {
+    const nextTheme = enabled ? "dark" : "light";
+    setColorScheme(nextTheme);
+    await setStoredTheme(nextTheme);
   };
 
   return (
@@ -31,7 +44,7 @@ const ProfileScreen = () => {
       >
         {/* HEADER */}
         <View className="px-6 pb-8">
-          <View className="bg-surface rounded-3xl p-6">
+          <View className="bg-surface dark:bg-surface-dark rounded-3xl p-6">
             <View className="flex-row items-center">
               <View className="relative">
                 <Image
@@ -39,16 +52,16 @@ const ProfileScreen = () => {
                   style={{ width: 80, height: 80, borderRadius: 40 }}
                   transition={200}
                 />
-                <View className="absolute -bottom-1 -right-1 bg-primary rounded-full size-7 items-center justify-center border-2 border-surface">
+                <View className="absolute -bottom-1 -right-1 bg-primary rounded-full size-7 items-center justify-center border-2 border-surface dark:border-surface-dark">
                   <Ionicons name="checkmark" size={16} color="#121212" />
                 </View>
               </View>
 
               <View className="flex-1 ml-4">
-                <Text className="text-text-primary text-2xl font-bold mb-1">
+                <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold mb-1">
                   {user?.firstName} {user?.lastName}
                 </Text>
-                <Text className="text-text-secondary text-sm">
+                <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">
                   {user?.emailAddresses?.[0]?.emailAddress || "No email"}
                 </Text>
               </View>
@@ -61,7 +74,7 @@ const ProfileScreen = () => {
           {MENU_ITEMS.map((item) => (
             <TouchableOpacity
               key={item.id}
-              className="bg-surface rounded-2xl p-6 items-center justify-center"
+              className="bg-surface dark:bg-surface-dark rounded-2xl p-6 items-center justify-center"
               style={{ width: "48%" }}
               activeOpacity={0.7}
               onPress={() => handleMenuPress(item.action)}
@@ -72,43 +85,61 @@ const ProfileScreen = () => {
               >
                 <Ionicons name={item.icon} size={28} color={item.color} />
               </View>
-              <Text className="text-text-primary font-bold text-base">{item.title}</Text>
+              <Text className="text-text-primary dark:text-text-primary-dark font-bold text-base">{item.title}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
+        {/* THEME TOGGLE */}
+        <View className="mb-3 mx-6 bg-surface dark:bg-surface-dark rounded-2xl p-4">
+          <View className="flex-row items-center justify-between py-2">
+            <View className="flex-row items-center">
+              <Ionicons name={isDark ? "moon-outline" : "sunny-outline"} size={22} color="#1DB954" />
+              <Text className="text-text-primary dark:text-text-primary-dark font-semibold ml-3">
+                Dark Theme
+              </Text>
+            </View>
+            <Switch
+              value={isDark}
+              onValueChange={(value) => void handleThemeToggle(value)}
+              thumbColor="#FFFFFF"
+              trackColor={switchTrackColor}
+            />
+          </View>
+        </View>
+
         {/* NOTIFICATONS BTN */}
-        <View className="mb-3 mx-6 bg-surface rounded-2xl p-4">
+        {/* <View className="mb-3 mx-6 bg-surface dark:bg-surface-dark rounded-2xl p-4">
           <TouchableOpacity
             className="flex-row items-center justify-between py-2"
             activeOpacity={0.7}
           >
             <View className="flex-row items-center">
-              <Ionicons name="notifications-outline" size={22} color="#FFFFFF" />
-              <Text className="text-text-primary font-semibold ml-3">Notifications</Text>
+              <Ionicons name="notifications-outline" size={22} color={iconColor} />
+              <Text className="text-text-primary dark:text-text-primary-dark font-semibold ml-3">Notifications</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#666" />
+            <Ionicons name="chevron-forward" size={20} color={mutedIconColor} />
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         {/* PRIVACY AND SECURTIY LINK */}
-        <View className="mb-3 mx-6 bg-surface rounded-2xl p-4">
+        {/* <View className="mb-3 mx-6 bg-surface dark:bg-surface-dark rounded-2xl p-4">
           <TouchableOpacity
             className="flex-row items-center justify-between py-2"
             activeOpacity={0.7}
             onPress={() => router.push("/privacy-security")}
           >
             <View className="flex-row items-center">
-              <Ionicons name="shield-checkmark-outline" size={22} color="#FFFFFF" />
-              <Text className="text-text-primary font-semibold ml-3">Privacy & Security</Text>
+              <Ionicons name="shield-checkmark-outline" size={22} color={iconColor} />
+              <Text className="text-text-primary dark:text-text-primary-dark font-semibold ml-3">Privacy & Security</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#666" />
+            <Ionicons name="chevron-forward" size={20} color={mutedIconColor} />
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         {/* SIGNOUT BTN */}
         <TouchableOpacity
-          className="mx-6 mb-3 bg-surface rounded-2xl py-5 flex-row items-center justify-center border-2 border-red-500/20"
+          className="mx-6 mb-3 bg-surface dark:bg-surface-dark rounded-2xl py-5 flex-row items-center justify-center border-2 border-red-500/20"
           activeOpacity={0.8}
           onPress={() => signOut()}
         >
@@ -116,7 +147,7 @@ const ProfileScreen = () => {
           <Text className="text-red-500 font-bold text-base ml-2">Sign Out</Text>
         </TouchableOpacity>
 
-        <Text className="mx-6 mb-3 text-center text-text-secondary text-xs">Version 1.0.0</Text>
+        <Text className="mx-6 mb-3 text-center text-text-secondary dark:text-text-secondary-dark text-xs">Version 1.0.0</Text>
       </ScrollView>
     </SafeScreen>
   );

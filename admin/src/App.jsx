@@ -8,11 +8,13 @@ import OrdersPage from "./pages/OrdersPage";
 import CustomersPage from "./pages/CustomersPage";
 import DashboardLayout from "./layouts/DashboardLayout";
 import { setAuthTokenGetter } from "./lib/authToken";
+import { useAdminTheme } from "./hooks/useAdminTheme";
 
 import PageLoader from "./components/PageLoader";
 
 function App() {
   const { isSignedIn, isLoaded, getToken } = useAuth();
+  const { isDark, toggleTheme } = useAdminTheme();
 
   useEffect(() => {
     setAuthTokenGetter(getToken);
@@ -28,7 +30,16 @@ function App() {
     <Routes>
       <Route path="/login" element={isSignedIn ? <Navigate to={"/dashboard"} /> : <LoginPage />} />
 
-      <Route path="/" element={isSignedIn ? <DashboardLayout /> : <Navigate to={"/login"} />}>
+      <Route
+        path="/"
+        element={
+          isSignedIn ? (
+            <DashboardLayout isDark={isDark} onThemeToggle={toggleTheme} />
+          ) : (
+            <Navigate to={"/login"} />
+          )
+        }
+      >
         <Route index element={<Navigate to={"dashboard"} />} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="products" element={<ProductsPage />} />

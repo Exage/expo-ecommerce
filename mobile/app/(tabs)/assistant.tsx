@@ -2,8 +2,10 @@ import SafeScreen from "@/components/SafeScreen";
 import { useApi } from "@/lib/api";
 import { Product } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { router } from "expo-router";
 import { useMemo, useRef, useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -11,9 +13,9 @@ import {
   ScrollView,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
   Image,
+  TouchableOpacity,
 } from "react-native";
 
 type ChatMessage = {
@@ -30,6 +32,8 @@ type AssistantSuggestResponse = {
 
 const AssistantScreen = () => {
   const api = useApi();
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = useBottomTabBarHeight();
   const scrollRef = useRef<ScrollView>(null);
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -42,20 +46,12 @@ const AssistantScreen = () => {
   ]);
 
   const canSend = useMemo(() => input.trim().length > 0 && !isSending, [input, isSending]);
+  const inputBottomOffset = tabBarHeight + insets.bottom + 8;
 
   const scrollToBottom = () => {
     requestAnimationFrame(() => {
       scrollRef.current?.scrollToEnd({ animated: true });
     });
-  };
-
-  const handleBack = () => {
-    if (router.canGoBack()) {
-      router.back();
-      return;
-    }
-
-    router.replace("/(tabs)/index");
   };
 
   const handleSend = async () => {
@@ -108,17 +104,10 @@ const AssistantScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         keyboardVerticalOffset={Platform.OS === "ios" ? 8 : 0}
       >
-        <View className="px-6 pt-4 pb-3 border-b border-surface-light">
-          <TouchableOpacity
-            className="self-start flex-row items-center mb-3"
-            onPress={handleBack}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="chevron-back" size={18} color="#B3B3B3" />
-            <Text className="text-text-secondary text-sm">Назад</Text>
-          </TouchableOpacity>
-          <Text className="text-text-primary text-2xl font-bold">AI Assistant</Text>
-          <Text className="text-text-secondary mt-1">Simple chat preview</Text>
+        <View className="px-6 pb-5 border-b border-surface dark:border-surface-dark flex-row items-center">
+          <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">
+            AI Assistant
+          </Text>
         </View>
 
         <ScrollView
@@ -133,11 +122,11 @@ const AssistantScreen = () => {
             <View key={message.id} className={`mb-4 ${message.role === "user" ? "items-end" : "items-start"}`}>
               <View
                 className={`max-w-[90%] rounded-2xl px-4 py-3 ${
-                  message.role === "user" ? "bg-primary" : "bg-surface"
+                  message.role === "user" ? "bg-primary" : "bg-surface dark:bg-surface-dark"
                 }`}
               >
                 <Text
-                  className={`${message.role === "user" ? "text-background" : "text-text-primary"} text-base`}
+                  className={`${message.role === "user" ? "text-background" : "text-text-primary dark:text-text-primary-dark"} text-base`}
                 >
                   {message.text}
                 </Text>
@@ -153,25 +142,25 @@ const AssistantScreen = () => {
                   {message.products?.map((product) => (
                     <TouchableOpacity
                       key={product._id}
-                      className="bg-surface-light rounded-2xl p-3 mr-3 w-44"
+                      className="bg-surface-light dark:bg-surface-dark-light rounded-2xl p-3 mr-3 w-44"
                       activeOpacity={0.8}
                       onPress={() => router.push(`/product/${product._id}`)}
                     >
                       {product.images?.[0] ? (
                         <Image
                           source={{ uri: product.images[0] }}
-                          className="w-full h-24 rounded-xl bg-background-lighter"
+                          className="w-full h-24 rounded-xl bg-background-lighter dark:bg-background-dark-lighter"
                           resizeMode="cover"
                         />
                       ) : (
-                        <View className="w-full h-24 rounded-xl bg-background-lighter items-center justify-center">
-                          <Ionicons name="image-outline" size={20} color="#8A8A8A" />
+                        <View className="w-full h-24 rounded-xl bg-background-lighter dark:bg-background-dark-lighter items-center justify-center">
+                          <Ionicons name="image-outline" size={20} color="#94A3B8" />
                         </View>
                       )}
-                      <Text className="text-text-secondary text-xs mt-2" numberOfLines={1}>
+                      <Text className="text-text-secondary dark:text-text-secondary-dark text-xs mt-2" numberOfLines={1}>
                         {product.category}
                       </Text>
-                      <Text className="text-text-primary font-semibold text-sm mt-1" numberOfLines={2}>
+                      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-sm mt-1" numberOfLines={2}>
                         {product.name}
                       </Text>
                       <Text className="text-primary font-bold text-base mt-2">
@@ -185,12 +174,15 @@ const AssistantScreen = () => {
           ))}
         </ScrollView>
 
-        <View className="px-4 py-3 border-t border-surface-light bg-background">
-          <View className="flex-row items-center bg-surface rounded-2xl px-4 py-2">
+        <View
+          className="px-4 py-3 border-t border-surface-light dark:border-surface-dark-light bg-background dark:bg-background-dark"
+          style={{ marginBottom: inputBottomOffset }}
+        >
+          <View className="flex-row items-center bg-surface dark:bg-surface-dark rounded-2xl px-4 py-2">
             <TextInput
-              className="flex-1 text-text-primary text-base py-2"
+              className="flex-1 text-text-primary dark:text-text-primary-dark text-base py-2"
               placeholder="Например: подбери ноутбук до $1000"
-              placeholderTextColor="#8A8A8A"
+              placeholderTextColor="#94A3B8"
               value={input}
               onChangeText={setInput}
               editable={!isSending}
@@ -198,15 +190,15 @@ const AssistantScreen = () => {
               returnKeyType="send"
             />
             <TouchableOpacity
-              className={`ml-3 size-10 rounded-full items-center justify-center ${canSend ? "bg-primary" : "bg-surface-light"}`}
+              className={`ml-3 size-10 rounded-full items-center justify-center ${canSend ? "bg-primary" : "bg-surface-light dark:bg-surface-dark-light"}`}
               onPress={handleSend}
               disabled={!canSend}
               activeOpacity={0.8}
             >
               {isSending ? (
-                <ActivityIndicator size="small" color="#121212" />
+                <ActivityIndicator size="small" color="#F8FAFC" />
               ) : (
-                <Ionicons name="send" size={18} color={canSend ? "#121212" : "#8A8A8A"} />
+                <Ionicons name="send" size={18} color={canSend ? "#F8FAFC" : "#94A3B8"} />
               )}
             </TouchableOpacity>
           </View>

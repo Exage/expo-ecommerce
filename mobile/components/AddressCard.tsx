@@ -18,13 +18,13 @@ export default function AddressCard({
   isDeletingAddress,
 }: AddressCardProps) {
   return (
-    <View className="bg-surface rounded-3xl p-5 mb-3">
+    <View className="bg-surface dark:bg-surface-dark rounded-3xl p-5 mb-3">
       <View className="flex-row items-center justify-between mb-4">
         <View className="flex-row items-center">
           <View className="bg-primary/20 rounded-full w-12 h-12 items-center justify-center mr-3">
             <Ionicons name="location" size={24} color="#1DB954" />
           </View>
-          <Text className="text-text-primary font-bold text-lg">{address.label}</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark font-bold text-lg">{address.label}</Text>
         </View>
         {address.isDefault && (
           <View className="bg-primary px-3 py-1 rounded-full">
@@ -33,12 +33,12 @@ export default function AddressCard({
         )}
       </View>
       <View className="ml-15">
-        <Text className="text-text-primary font-semibold mb-1">{address.fullName}</Text>
-        <Text className="text-text-secondary text-sm mb-1">{address.streetAddress}</Text>
-        <Text className="text-text-secondary text-sm mb-2">
+        <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-1">{address.fullName}</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mb-1">{address.streetAddress}</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mb-2">
           {address.city}, {address.state} {address.zipCode}
         </Text>
-        <Text className="text-text-secondary text-sm">{address.phoneNumber}</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">{address.phoneNumber}</Text>
       </View>
       <View className="flex-row mt-4 gap-2">
         <TouchableOpacity

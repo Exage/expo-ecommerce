@@ -13,8 +13,13 @@ import OrderSummary from "@/components/OrderSummary";
 import AddressSelectionModal from "@/components/AddressSelectionModal";
 
 import * as Sentry from "@sentry/react-native";
+import { useColorScheme } from "nativewind";
 
 const CartScreen = () => {
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+  const qtyIconColor = isDark ? "#FFFFFF" : "#0F172A";
+
   const api = useApi();
   const {
     cart,
@@ -167,7 +172,7 @@ const CartScreen = () => {
 
   return (
     <SafeScreen>
-      <Text className="px-6 pb-5 text-text-primary text-3xl font-bold tracking-tight">Cart</Text>
+      <Text className="px-6 pb-5 text-text-primary dark:text-text-primary-dark text-3xl font-bold tracking-tight">Cart</Text>
 
       <ScrollView
         className="flex-1"
@@ -176,13 +181,13 @@ const CartScreen = () => {
       >
         <View className="px-6 gap-2">
           {cartItems.map((item, index) => (
-            <View key={item._id} className="bg-surface rounded-3xl overflow-hidden ">
+            <View key={item._id} className="bg-surface dark:bg-surface-dark rounded-3xl overflow-hidden ">
               <View className="p-4 flex-row">
                 {/* product image */}
                 <View className="relative">
                   <Image
                     source={item.product.images[0]}
-                    className="bg-background-lighter"
+                    className="bg-background-lighter dark:bg-background-dark-lighter"
                     contentFit="cover"
                     style={{ width: 112, height: 112, borderRadius: 16 }}
                   />
@@ -194,7 +199,7 @@ const CartScreen = () => {
                 <View className="flex-1 ml-4 justify-between">
                   <View>
                     <Text
-                      className="text-text-primary font-bold text-lg leading-tight"
+                      className="text-text-primary dark:text-text-primary-dark font-bold text-lg leading-tight"
                       numberOfLines={2}
                     >
                       {item.product.name}
@@ -203,7 +208,7 @@ const CartScreen = () => {
                       <Text className="text-primary font-bold text-2xl">
                         ${(item.product.price * item.quantity).toFixed(2)}
                       </Text>
-                      <Text className="text-text-secondary text-sm ml-2">
+                      <Text className="text-text-secondary dark:text-text-secondary-dark text-sm ml-2">
                         ${item.product.price.toFixed(2)} each
                       </Text>
                     </View>
@@ -211,20 +216,20 @@ const CartScreen = () => {
 
                   <View className="flex-row items-center mt-3">
                     <TouchableOpacity
-                      className="bg-background-lighter rounded-full w-9 h-9 items-center justify-center"
+                      className="bg-background-lighter dark:bg-background-dark-lighter rounded-full w-9 h-9 items-center justify-center"
                       activeOpacity={0.7}
                       onPress={() => handleQuantityChange(item.product._id, item.quantity, -1)}
                       disabled={isUpdating}
                     >
                       {isUpdating ? (
-                        <ActivityIndicator size="small" color="#FFFFFF" />
+                        <ActivityIndicator size="small" color={qtyIconColor} />
                       ) : (
-                        <Ionicons name="remove" size={18} color="#FFFFFF" />
+                        <Ionicons name="remove" size={18} color={qtyIconColor} />
                       )}
                     </TouchableOpacity>
 
                     <View className="mx-4 min-w-[32px] items-center">
-                      <Text className="text-text-primary font-bold text-lg">{item.quantity}</Text>
+                      <Text className="text-text-primary dark:text-text-primary-dark font-bold text-lg">{item.quantity}</Text>
                     </View>
 
                     <TouchableOpacity
@@ -234,9 +239,9 @@ const CartScreen = () => {
                       disabled={isUpdating}
                     >
                       {isUpdating ? (
-                        <ActivityIndicator size="small" color="#121212" />
+                        <ActivityIndicator size="small" color="#F8FAFC" />
                       ) : (
-                        <Ionicons name="add" size={18} color="#121212" />
+                        <Ionicons name="add" size={18} color="#F8FAFC" />
                       )}
                     </TouchableOpacity>
 
@@ -259,19 +264,19 @@ const CartScreen = () => {
       </ScrollView>
 
       <View
-        className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-xl border-t
-       border-surface pt-4 pb-32 px-6"
+        className="absolute bottom-0 left-0 right-0 bg-background/95 dark:bg-background-dark/95 backdrop-blur-xl border-t
+       border-surface dark:border-surface-dark pt-4 pb-32 px-6"
       >
         {/* Quick Stats */}
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center">
             <Ionicons name="cart" size={20} color="#1DB954" />
-            <Text className="text-text-secondary ml-2">
+            <Text className="text-text-secondary dark:text-text-secondary-dark ml-2">
               {cartItemCount} {cartItemCount === 1 ? "item" : "items"}
             </Text>
           </View>
           <View className="flex-row items-center">
-            <Text className="text-text-primary font-bold text-xl">${total.toFixed(2)}</Text>
+            <Text className="text-text-primary dark:text-text-primary-dark font-bold text-xl">${total.toFixed(2)}</Text>
           </View>
         </View>
 
@@ -284,11 +289,11 @@ const CartScreen = () => {
         >
           <View className="py-5 flex-row items-center justify-center">
             {paymentLoading ? (
-              <ActivityIndicator size="small" color="#121212" />
+              <ActivityIndicator size="small" color="#F8FAFC" />
             ) : (
               <>
                 <Text className="text-background font-bold text-lg mr-2">Checkout</Text>
-                <Ionicons name="arrow-forward" size={20} color="#121212" />
+                <Ionicons name="arrow-forward" size={20} color="#F8FAFC" />
               </>
             )}
           </View>
@@ -309,19 +314,19 @@ export default CartScreen;
 
 function LoadingUI() {
   return (
-    <View className="flex-1 bg-background items-center justify-center">
-      <ActivityIndicator size="large" color="#00D9FF" />
-      <Text className="text-text-secondary mt-4">Loading cart...</Text>
+    <View className="flex-1 bg-background dark:bg-background-dark items-center justify-center">
+      <ActivityIndicator size="large" color="#1DB954" />
+      <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading cart...</Text>
     </View>
   );
 }
 
 function ErrorUI() {
   return (
-    <View className="flex-1 bg-background items-center justify-center px-6">
+    <View className="flex-1 bg-background dark:bg-background-dark items-center justify-center px-6">
       <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-      <Text className="text-text-primary font-semibold text-xl mt-4">Failed to load cart</Text>
-      <Text className="text-text-secondary text-center mt-2">
+      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">Failed to load cart</Text>
+      <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
         Please check your connection and try again
       </Text>
     </View>
@@ -330,14 +335,14 @@ function ErrorUI() {
 
 function EmptyUI() {
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1 bg-background dark:bg-background-dark">
       <View className="px-6 pt-16 pb-5">
-        <Text className="text-text-primary text-3xl font-bold tracking-tight">Cart</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark text-3xl font-bold tracking-tight">Cart</Text>
       </View>
       <View className="flex-1 items-center justify-center px-6">
-        <Ionicons name="cart-outline" size={80} color="#666" />
-        <Text className="text-text-primary font-semibold text-xl mt-4">Your cart is empty</Text>
-        <Text className="text-text-secondary text-center mt-2">
+        <Ionicons name="cart-outline" size={80} color="#64748B" />
+        <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">Your cart is empty</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
           Add some products to get started
         </Text>
       </View>
