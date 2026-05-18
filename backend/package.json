@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
-    "seed:products": "node src/seeds/index.js"
+    "seed:products": "node src/seeds/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:server": "vitest run tests/server-api.test.js"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +26,9 @@
     "mongoose": "^8.19.3",
     "multer": "^2.0.2",
     "stripe": "^19.3.1"
+  },
+  "devDependencies": {
+    "node-mocks-http": "^1.17.2",
+    "vitest": "^3.2.4"
   }
 }

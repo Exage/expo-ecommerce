@@ -458,6 +458,12 @@ export async function getAssistantProductSuggestions(req, res) {
         debugLog("Gemini responded", aiResult);
       } catch (geminiError) {
         console.error("Gemini recommendation failed:", geminiError);
+        aiResult = {
+          assistantMessage: "",
+          productIds: [],
+          isFromGemini: false,
+          debugReason: "request_failed",
+        };
         debugLog("Fallback: Gemini threw an error", {
           errorMessage: geminiError?.message || "unknown_error",
         });
