@@ -16,7 +16,7 @@ const AuthScreen = () => {
       <View className="gap-2 mt-3">
         {/* GOOGLE SIGN IN BTN */}
         <TouchableOpacity
-          className="flex-row items-center justify-center bg-white border border-gray-300 rounded-full px-6 py-2"
+          className="flex-row items-center justify-center bg-white border border-gray-300 rounded-full px-6 py-2 w-72"
           onPress={() => handleSocialAuth("oauth_google")}
           disabled={loadingStrategy !== null}
           style={{
@@ -25,23 +25,27 @@ const AuthScreen = () => {
             elevation: 2, // this is for android
           }}
         >
-          {loadingStrategy === "oauth_google" ? (
-            <ActivityIndicator size={"small"} color={"#4285f4"} />
-          ) : (
-            <View className="flex-row items-center justify-center">
-              <Image
-                source={require("../../assets/images/google.png")}
-                className="size-10 mr-3"
-                resizeMode="contain"
-              />
-              <Text className="text-black font-medium text-base">Continue with Google</Text>
-            </View>
-          )}
+          <View className="h-8 flex items-center justify-center">
+            {loadingStrategy === "oauth_google" ? (
+              <ActivityIndicator size={"small"} color={"#111"} />
+            ) : (
+              <View className="flex-row items-center justify-center">
+                <Image
+                  source={require("../../assets/images/google.png")}
+                  className="size-8 mr-3"
+                  resizeMode="contain"
+                />
+                <Text className="text-black font-medium text-base">
+                  Continue with Google
+                </Text>
+              </View>
+            )}
+          </View>
         </TouchableOpacity>
 
         {/* APPLE SIGN IN BTN */}
         <TouchableOpacity
-          className="flex-row items-center justify-center bg-white border border-gray-300 rounded-full px-6 py-3"
+          className="flex-row items-center justify-center bg-white border border-gray-300 rounded-full px-6 py-2 w-72"
           onPress={() => handleSocialAuth("oauth_apple")}
           disabled={loadingStrategy !== null}
           style={{
@@ -50,18 +54,22 @@ const AuthScreen = () => {
             elevation: 2, // this is for android
           }}
         >
-          {loadingStrategy === "oauth_apple" ? (
-            <ActivityIndicator size={"small"} color={"#4285f4"} />
-          ) : (
-            <View className="flex-row items-center justify-center">
-              <Image
-                source={require("../../assets/images/apple.png")}
-                className="size-8 mr-3"
-                resizeMode="contain"
-              />
-              <Text className="text-black font-medium text-base">Continue with Apple</Text>
-            </View>
-          )}
+          <View className="h-8 flex items-center justify-center">
+            {loadingStrategy === "oauth_apple" ? (
+              <ActivityIndicator size={"small"} color={"#111"} />
+            ) : (
+              <View className="flex-row items-center justify-center">
+                <Image
+                  source={require("../../assets/images/apple.png")}
+                  className="size-5 mr-3"
+                  resizeMode="contain"
+                />
+                <Text className="text-black font-medium text-base">
+                  Continue with Apple
+                </Text>
+              </View>
+            )}
+          </View>
         </TouchableOpacity>
       </View>
 

@@ -4,8 +4,8 @@ import useCatalogMeta from "@/hooks/useCatalogMeta";
 import useProducts from "@/hooks/useProducts";
 
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useMemo, useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Image } from "react-native";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, RefreshControl } from "react-native";
 import { useColorScheme } from "nativewind";
 
 const CATEGORY_IMAGES = {
@@ -19,12 +19,22 @@ const ShopScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSubcategory, setSelectedSubcategory] = useState("All");
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const { colorScheme } = useColorScheme();
   const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
   const mutedIconColor = colorScheme === "dark" ? "#B3B3B3" : "#64748B";
 
-  const { data: products, isLoading, isError } = useProducts();
-  const { data: catalogMeta } = useCatalogMeta();
+  const { data: products, isLoading, isError, refetch: refetchProducts } = useProducts();
+  const { data: catalogMeta, refetch: refetchCatalogMeta } = useCatalogMeta();
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await Promise.all([refetchProducts(), refetchCatalogMeta()]);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [refetchCatalogMeta, refetchProducts]);
 
   const categoryIconMap = useMemo(() => {
     const map: Record<string, string> = { All: "grid-outline" };
@@ -105,6 +115,7 @@ const ShopScreen = () => {
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
       >
         {/* HEADER */}
         <View className="px-6 pb-4 pt-6">

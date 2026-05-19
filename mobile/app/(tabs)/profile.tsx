@@ -20,8 +20,8 @@ const ProfileScreen = () => {
   const { user } = useUser();
   const { colorScheme, setColorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
-  const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
-  const mutedIconColor = colorScheme === "dark" ? "#B3B3B3" : "#64748B";
+  // const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
+  // const mutedIconColor = colorScheme === "dark" ? "#B3B3B3" : "#64748B";
   const switchTrackColor = { false: isDark ? "#2A2A2A" : "#CBD5E1", true: "#1DB954" };
 
   const handleMenuPress = (action: (typeof MENU_ITEMS)[number]["action"]) => {

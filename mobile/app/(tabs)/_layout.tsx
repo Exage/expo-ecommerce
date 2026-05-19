@@ -27,7 +27,7 @@ const TabsLayout = () => {
           borderTopColor: isDark ? "transparent" : "#E2E8F0",
           height: 32 + insets.bottom,
           paddingTop: 4,
-          marginHorizontal: 72,
+          marginHorizontal: 40,
           marginBottom: insets.bottom,
           borderRadius: 24,
           overflow: "hidden",

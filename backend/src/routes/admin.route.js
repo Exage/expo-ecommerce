@@ -9,13 +9,21 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/admin.controller.js";
+import { ENV } from "../config/env.js";
 import { adminOnly, protectRoute } from "../middleware/auth.middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
 
 const router = Router();
 
 // optimization - DRY
-router.use(protectRoute, adminOnly);
+if (ENV.DEV_BYPASS_ADMIN_ROUTES_AUTH) {
+  router.use((req, _res, next) => {
+    req.user = req.user || { email: ENV.ADMIN_EMAIL || "dev@local" };
+    next();
+  });
+} else {
+  router.use(protectRoute, adminOnly);
+}
 
 router.post("/products", upload.array("images", 3), createProduct);
 router.get("/products", getAllProducts);

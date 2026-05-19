@@ -1,11 +1,13 @@
 import SafeScreen from "@/components/SafeScreen";
+import useCatalogMeta from "@/hooks/useCatalogMeta";
 import useCart from "@/hooks/useCart";
 import { useProduct } from "@/hooks/useProduct";
 import useWishlist from "@/hooks/useWishlist";
+import { CatalogSpecRule } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -25,6 +27,7 @@ const ProductDetailScreen = () => {
 
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: product, isError, isLoading } = useProduct(id);
+  const { data: catalogMeta } = useCatalogMeta();
   const { addToCart, isAddingToCart } = useCart();
 
   const { isInWishlist, toggleWishlist, isAddingToWishlist, isRemovingFromWishlist } =
@@ -50,6 +53,39 @@ const ProductDetailScreen = () => {
   if (isError || !product) return <ErrorUI />;
 
   const inStock = product.stock > 0;
+  const specsTableRows = useMemo(() => {
+    const rows: Array<{ label: string; value: string }> = [];
+
+    const matchedCategory = catalogMeta?.categories.find((category) => category.name === product.category);
+    const matchedSubcategory = matchedCategory?.subcategories.find(
+      (subcategory) => subcategory.name === product.subcategory
+    );
+    const templateSpecs = matchedSubcategory?.specs || {};
+    const productSpecs = product.specs || {};
+
+    const templateEntries = Object.entries(templateSpecs);
+    if (templateEntries.length > 0) {
+      for (const [key, rule] of templateEntries) {
+        const rawValue = productSpecs[key];
+        if (rawValue === undefined || rawValue === null || rawValue === "") continue;
+        rows.push({
+          label: makeSpecLabel(key),
+          value: formatSpecValue(rawValue, rule),
+        });
+      }
+      return rows;
+    }
+
+    for (const [key, value] of Object.entries(productSpecs)) {
+      if (value === undefined || value === null || value === "") continue;
+      rows.push({
+        label: makeSpecLabel(key),
+        value: formatSpecValue(value),
+      });
+    }
+
+    return rows;
+  }, [catalogMeta, product.category, product.subcategory, product.specs]);
 
   return (
     <SafeScreen>
@@ -204,6 +240,32 @@ const ProductDetailScreen = () => {
             <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-3">Description</Text>
             <Text className="text-text-secondary dark:text-text-secondary-dark text-base leading-6">{product.description}</Text>
           </View>
+
+          {/* Specs Table */}
+          {specsTableRows.length > 0 && (
+            <View className="mb-8">
+              <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-3">
+                Characteristics
+              </Text>
+              <View className="rounded-2xl border border-surface dark:border-surface-dark overflow-hidden">
+                {specsTableRows.map((row, index) => (
+                  <View
+                    key={`${row.label}-${index}`}
+                    className={`flex-row items-center px-4 py-3 ${
+                      index % 2 === 0 ? "bg-surface/40 dark:bg-surface-dark/40" : "bg-background dark:bg-background-dark"
+                    }`}
+                  >
+                    <Text className="text-text-secondary dark:text-text-secondary-dark text-sm flex-1 mr-3">
+                      {row.label}
+                    </Text>
+                    <Text className="text-text-primary dark:text-text-primary-dark text-sm font-semibold flex-1 text-right">
+                      {row.value}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -246,6 +308,32 @@ const ProductDetailScreen = () => {
 };
 
 export default ProductDetailScreen;
+
+function makeSpecLabel(key: string) {
+  return String(key)
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function formatSpecValue(value: unknown, rule?: CatalogSpecRule) {
+  if (Array.isArray(value)) {
+    const rendered = value.map((item) => String(item)).join(", ");
+    return rule?.unit ? `${rendered} ${rule.unit}` : rendered;
+  }
+
+  if (typeof value === "boolean") {
+    return value ? "Yes" : "No";
+  }
+
+  if (value && typeof value === "object") {
+    return JSON.stringify(value);
+  }
+
+  const rendered = String(value);
+  return rule?.unit ? `${rendered} ${rule.unit}` : rendered;
+}
 
 function ErrorUI() {
   return (

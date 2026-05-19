@@ -7,6 +7,12 @@ export const ENV = {
   DEV_USE_MOCK_PRODUCTS: ["1", "true", "yes", "on"].includes(
     String(process.env.DEV_USE_MOCK_PRODUCTS || "").toLowerCase()
   ),
+  DEV_BYPASS_ADMIN_CHECK: ["1", "true", "yes", "on"].includes(
+    String(process.env.DEV_BYPASS_ADMIN_CHECK || "").toLowerCase()
+  ),
+  DEV_BYPASS_ADMIN_ROUTES_AUTH: ["1", "true", "yes", "on"].includes(
+    String(process.env.DEV_BYPASS_ADMIN_ROUTES_AUTH || "").toLowerCase()
+  ),
   PORT: process.env.PORT,
   DB_URL: process.env.DB_URL,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
