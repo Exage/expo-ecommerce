@@ -5,10 +5,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BlurView } from "expo-blur";
 import { StyleSheet } from "react-native";
 import { useColorScheme } from "nativewind";
+import { useI18n } from "@/lib/i18n";
 
 const TabsLayout = () => {
   const { isSignedIn, isLoaded } = useAuth();
   const { colorScheme } = useColorScheme();
+  const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const isDark = colorScheme === "dark";
 
@@ -51,21 +53,21 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Shop",
+          title: t("tabs.shop"),
           tabBarIcon: ({ color, size }) => <Ionicons name="grid" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="cart"
         options={{
-          title: "Cart",
+          title: t("tabs.cart"),
           tabBarIcon: ({ color, size }) => <Ionicons name="cart" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="assistant"
         options={{
-          title: "AI",
+          title: t("tabs.ai"),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbubble-ellipses" size={size} color={color} />
           ),
@@ -74,7 +76,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: t("tabs.profile"),
           tabBarIcon: ({ color, size }) => <Ionicons name="person" size={size} color={color} />,
         }}
       />

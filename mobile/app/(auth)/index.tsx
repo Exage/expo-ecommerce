@@ -1,8 +1,10 @@
 import useSocialAuth from "@/hooks/useSocialAuth";
+import { useI18n } from "@/lib/i18n";
 import { View, Text, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 
 const AuthScreen = () => {
   const { loadingStrategy, handleSocialAuth } = useSocialAuth();
+  const { t } = useI18n();
 
   return (
     <View className="px-8 flex-1 justify-center items-center bg-white">
@@ -36,7 +38,7 @@ const AuthScreen = () => {
                   resizeMode="contain"
                 />
                 <Text className="text-black font-medium text-base">
-                  Continue with Google
+                  {t("auth.google")}
                 </Text>
               </View>
             )}
@@ -65,7 +67,7 @@ const AuthScreen = () => {
                   resizeMode="contain"
                 />
                 <Text className="text-black font-medium text-base">
-                  Continue with Apple
+                  {t("auth.apple")}
                 </Text>
               </View>
             )}
@@ -74,11 +76,11 @@ const AuthScreen = () => {
       </View>
 
       <Text className="text-center text-gray-500 text-xs leading-4 mt-6 px-2">
-        By signing up, you agree to our <Text className="text-blue-500">Terms</Text>
+        {t("auth.termsPrefix")} <Text className="text-blue-500">{t("auth.terms")}</Text>
         {", "}
-        <Text className="text-blue-500">Privacy Policy</Text>
+        <Text className="text-blue-500">{t("auth.privacy")}</Text>
         {", and "}
-        <Text className="text-blue-500">Cookie Use</Text>
+        <Text className="text-blue-500">{t("auth.cookies")}</Text>
       </Text>
     </View>
   );

@@ -13,6 +13,7 @@ import {
 import SafeScreen from "./SafeScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";
+import { useI18n } from "@/lib/i18n";
 
 interface AddressFormData {
   label: string;
@@ -47,6 +48,7 @@ const AddressFormModal = ({
   visible,
 }: AddressFormModalProps) => {
   const { colorScheme } = useColorScheme();
+  const { t } = useI18n();
   const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
 
   return (
@@ -59,7 +61,7 @@ const AddressFormModal = ({
           {/* HEADER */}
           <View className="px-6 py-5 border-b border-surface dark:border-surface-dark flex-row items-center justify-between">
             <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">
-              {isEditing ? "Edit Address" : "Add New Address"}
+              {isEditing ? t("addressForm.editTitle") : t("addressForm.addTitle")}
             </Text>
             <TouchableOpacity onPress={onClose}>
               <Ionicons name="close" size={28} color={iconColor} />
@@ -74,10 +76,10 @@ const AddressFormModal = ({
             <View className="p-6">
               {/* LABEL INPUT */}
               <View className="mb-5">
-                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">Label</Text>
+                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">{t("addressForm.label")}</Text>
                 <TextInput
                   className="bg-surface dark:bg-surface-dark text-text-primary dark:text-text-primary-dark p-4 rounded-2xl text-base"
-                  placeholder="e.g., Home, Work, Office"
+                  placeholder={t("addressForm.labelPlaceholder")}
                   placeholderTextColor="#64748B"
                   value={addressForm.label}
                   onChangeText={(text) => onFormChange({ ...addressForm, label: text })}
@@ -86,10 +88,10 @@ const AddressFormModal = ({
 
               {/* NAME INPUT */}
               <View className="mb-5">
-                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">Full Name</Text>
+                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">{t("addressForm.fullName")}</Text>
                 <TextInput
                   className="bg-surface dark:bg-surface-dark text-text-primary dark:text-text-primary-dark px-4 py-4 rounded-2xl text-base"
-                  placeholder="Enter your full name"
+                  placeholder={t("addressForm.fullNamePlaceholder")}
                   placeholderTextColor="#64748B"
                   value={addressForm.fullName}
                   onChangeText={(text) => onFormChange({ ...addressForm, fullName: text })}
@@ -98,10 +100,10 @@ const AddressFormModal = ({
 
               {/* Address Input */}
               <View className="mb-5">
-                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">Street Address</Text>
+                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">{t("addressForm.street")}</Text>
                 <TextInput
                   className="bg-surface dark:bg-surface-dark text-text-primary dark:text-text-primary-dark px-4 py-4 rounded-2xl text-base"
-                  placeholder="Street address, apt/suite number"
+                  placeholder={t("addressForm.streetPlaceholder")}
                   placeholderTextColor="#64748B"
                   value={addressForm.streetAddress}
                   onChangeText={(text) => onFormChange({ ...addressForm, streetAddress: text })}
@@ -111,10 +113,10 @@ const AddressFormModal = ({
 
               {/* City Input */}
               <View className="mb-5">
-                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">City</Text>
+                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">{t("addressForm.city")}</Text>
                 <TextInput
                   className="bg-surface dark:bg-surface-dark text-text-primary dark:text-text-primary-dark px-4 py-4 rounded-2xl text-base"
-                  placeholder="e.g., New York"
+                  placeholder={t("addressForm.cityPlaceholder")}
                   placeholderTextColor="#64748B"
                   value={addressForm.city}
                   onChangeText={(text) => onFormChange({ ...addressForm, city: text })}
@@ -123,10 +125,10 @@ const AddressFormModal = ({
 
               {/* State Input */}
               <View className="mb-5">
-                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">State</Text>
+                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">{t("addressForm.state")}</Text>
                 <TextInput
                   className="bg-surface dark:bg-surface-dark text-text-primary dark:text-text-primary-dark px-4 py-4 rounded-2xl text-base"
-                  placeholder="e.g., NY"
+                  placeholder={t("addressForm.statePlaceholder")}
                   placeholderTextColor="#64748B"
                   value={addressForm.state}
                   onChangeText={(text) => onFormChange({ ...addressForm, state: text })}
@@ -135,10 +137,10 @@ const AddressFormModal = ({
 
               {/* ZIP Code Input */}
               <View className="mb-5">
-                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">ZIP Code</Text>
+                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">{t("addressForm.zip")}</Text>
                 <TextInput
                   className="bg-surface dark:bg-surface-dark text-text-primary dark:text-text-primary-dark px-4 py-4 rounded-2xl text-base"
-                  placeholder="e.g., 10001"
+                  placeholder={t("addressForm.zipPlaceholder")}
                   placeholderTextColor="#64748B"
                   value={addressForm.zipCode}
                   onChangeText={(text) => onFormChange({ ...addressForm, zipCode: text })}
@@ -148,7 +150,7 @@ const AddressFormModal = ({
 
               {/* Phone Input */}
               <View className="mb-5">
-                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">Phone Number</Text>
+                <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-2">{t("addressForm.phone")}</Text>
                 <TextInput
                   className="bg-surface dark:bg-surface-dark text-text-primary dark:text-text-primary-dark px-4 py-4 rounded-2xl text-base"
                   placeholder="+1 (555) 123-4567"
@@ -161,7 +163,7 @@ const AddressFormModal = ({
 
               {/* Default Address Toggle */}
               <View className="bg-surface dark:bg-surface-dark rounded-2xl p-4 flex-row items-center justify-between mb-6">
-                <Text className="text-text-primary dark:text-text-primary-dark font-semibold">Set as default address</Text>
+                <Text className="text-text-primary dark:text-text-primary-dark font-semibold">{t("addressForm.defaultToggle")}</Text>
                 <Switch
                   value={addressForm.isDefault}
                   onValueChange={(value) => onFormChange({ ...addressForm, isDefault: value })}
@@ -180,7 +182,7 @@ const AddressFormModal = ({
                   <ActivityIndicator size="small" color="#F8FAFC" />
                 ) : (
                   <Text className="text-background font-bold text-lg">
-                    {isEditing ? "Save Changes" : "Add Address"}
+                    {isEditing ? t("addressForm.save") : t("addresses.add")}
                   </Text>
                 )}
               </TouchableOpacity>

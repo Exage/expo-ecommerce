@@ -4,6 +4,62 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { catalogApi, productApi } from "../lib/api";
 import { getStockStatusBadge } from "../lib/utils";
 
+const SMARTPHONE_ENUM_OVERRIDES = {
+  brand: {
+    type: "enum",
+    default: "apple",
+    options: ["apple", "samsung", "google", "xiaomi", "oneplus", "huawei", "nothing", "other"],
+  },
+  displayType: {
+    type: "enum",
+    default: "amoled",
+    options: ["ips", "oled", "amoled", "super-amoled", "ltpo", "other"],
+  },
+  processor: {
+    type: "enum",
+    default: "snapdragon-8-gen-2",
+    options: [
+      "a17-pro",
+      "a18",
+      "snapdragon-8-gen-2",
+      "snapdragon-8-gen-3",
+      "dimensity-9200",
+      "dimensity-9300",
+      "tensor-g3",
+      "tensor-g4",
+      "exynos-2400",
+      "other",
+    ],
+  },
+  mainCamera: {
+    type: "enum",
+    default: "50mp",
+    options: ["12mp", "48mp", "50mp", "64mp", "108mp", "200mp", "other"],
+  },
+  frontCamera: {
+    type: "enum",
+    default: "12mp",
+    options: ["8mp", "10mp", "12mp", "16mp", "32mp", "other"],
+  },
+  color: {
+    type: "enum",
+    default: "black",
+    options: ["black", "white", "silver", "gray", "blue", "green", "red", "purple", "gold", "pink", "other"],
+  },
+};
+
+const applySpecsUiOverrides = (categoryName, subcategoryName, specsTemplate = {}) => {
+  if (normalize(categoryName) === "electronics" && normalize(subcategoryName) === "smartphone") {
+    const merged = { ...specsTemplate };
+    Object.entries(SMARTPHONE_ENUM_OVERRIDES).forEach(([key, override]) => {
+      if (!merged[key]) return;
+      merged[key] = { ...merged[key], ...override, filterable: true };
+    });
+    return merged;
+  }
+  return specsTemplate;
+};
+
 const createDefaultSpecs = (specTemplate = {}, existingSpecs = {}) => {
   return Object.entries(specTemplate).reduce((acc, [key, rule]) => {
     if (existingSpecs[key] !== undefined) {
@@ -65,7 +121,15 @@ function ProductsPage() {
     );
   }, [subcategories, formData.subcategory]);
 
-  const selectedSpecsTemplate = selectedSubcategory?.specs ?? {};
+  const selectedSpecsTemplate = useMemo(
+    () =>
+      applySpecsUiOverrides(
+        selectedCategory?.name || formData.category,
+        selectedSubcategory?.name || formData.subcategory,
+        selectedSubcategory?.specs ?? {}
+      ),
+    [selectedCategory?.name, selectedSubcategory?.name, selectedSubcategory?.specs, formData.category, formData.subcategory]
+  );
 
   // creating, update, deleting
   const createProductMutation = useMutation({
@@ -116,7 +180,14 @@ function ProductsPage() {
       matchedCategory?.subcategories.find(
         (subcategory) => normalize(subcategory.name) === normalize(product.subcategory)
       ) || matchedCategory?.subcategories?.[0];
-    const initialSpecs = createDefaultSpecs(matchedSubcategory?.specs || {}, product.specs || {});
+    const initialSpecs = createDefaultSpecs(
+      applySpecsUiOverrides(
+        matchedCategory?.name || product.category,
+        matchedSubcategory?.name || product.subcategory,
+        matchedSubcategory?.specs || {}
+      ),
+      product.specs || {}
+    );
 
     setEditingProduct(product);
     setFormData({
@@ -141,7 +212,10 @@ function ProductsPage() {
       ...prev,
       category: categoryName,
       subcategory: nextSubcategory?.name || "",
-      specs: createDefaultSpecs(nextSubcategory?.specs || {}, {}),
+      specs: createDefaultSpecs(
+        applySpecsUiOverrides(categoryName, nextSubcategory?.name || "", nextSubcategory?.specs || {}),
+        {}
+      ),
     }));
   };
 
@@ -152,7 +226,10 @@ function ProductsPage() {
     setFormData((prev) => ({
       ...prev,
       subcategory: subcategoryName,
-      specs: createDefaultSpecs(nextSubcategory?.specs || {}, prev.specs),
+      specs: createDefaultSpecs(
+        applySpecsUiOverrides(formData.category, subcategoryName, nextSubcategory?.specs || {}),
+        prev.specs
+      ),
     }));
   };
 

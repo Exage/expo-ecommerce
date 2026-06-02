@@ -1,4 +1,5 @@
 import { Order } from "@/types";
+import { useI18n } from "@/lib/i18n";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import {
@@ -30,6 +31,7 @@ const RatingModal = ({
   onSubmit,
   isSubmitting,
 }: RatingModalProps) => {
+  const { t } = useI18n();
   return (
     <Modal visible={visible} animationType="fade" transparent={true} onRequestClose={onClose}>
       {/* backdrop layer */}
@@ -42,10 +44,10 @@ const RatingModal = ({
                   <Ionicons name="star" size={32} color="#1DB954" />
                 </View>
                 <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold mb-1">
-                  Rate Your Products
+                  {t("rating.title")}
                 </Text>
                 <Text className="text-text-secondary dark:text-text-secondary-dark text-center text-sm">
-                  Rate each product from your order
+                  {t("rating.subtitle")}
                 </Text>
               </View>
 
@@ -74,7 +76,7 @@ const RatingModal = ({
                             {item.name}
                           </Text>
                           <Text className="text-text-secondary dark:text-text-secondary-dark text-xs mt-1">
-                            Qty: {item.quantity} • ${item.price.toFixed(2)}
+                            {t("rating.qty")}: {item.quantity} • ${item.price.toFixed(2)}
                           </Text>
                         </View>
                       </View>
@@ -110,7 +112,7 @@ const RatingModal = ({
                   {isSubmitting ? (
                     <ActivityIndicator size="small" color="#F8FAFC" />
                   ) : (
-                    <Text className="text-background font-bold text-base">Submit All Ratings</Text>
+                    <Text className="text-background font-bold text-base">{t("rating.submitAll")}</Text>
                   )}
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -119,7 +121,7 @@ const RatingModal = ({
                   onPress={onClose}
                   disabled={isSubmitting}
                 >
-                  <Text className="text-text-secondary dark:text-text-secondary-dark font-bold text-base">Cancel</Text>
+                  <Text className="text-text-secondary dark:text-text-secondary-dark font-bold text-base">{t("common.cancel")}</Text>
                 </TouchableOpacity>
               </View>
             </View>

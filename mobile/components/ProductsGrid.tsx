@@ -1,5 +1,6 @@
 import useCart from "@/hooks/useCart";
 import useWishlist from "@/hooks/useWishlist";
+import { useI18n } from "@/lib/i18n";
 import { Product } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -20,6 +21,7 @@ interface ProductsGridProps {
 }
 
 const ProductsGrid = ({ products, isLoading, isError }: ProductsGridProps) => {
+  const { t } = useI18n();
   const { isInWishlist, toggleWishlist, isAddingToWishlist, isRemovingFromWishlist } =
     useWishlist();
 
@@ -30,10 +32,10 @@ const ProductsGrid = ({ products, isLoading, isError }: ProductsGridProps) => {
       { productId, quantity: 1 },
       {
         onSuccess: () => {
-          Alert.alert("Success", `${productName} added to cart!`);
+          Alert.alert(t("common.success"), t("products.added", { name: productName }));
         },
         onError: (error: any) => {
-          Alert.alert("Error", error?.response?.data?.error || "Failed to add to cart");
+          Alert.alert(t("common.error"), error?.response?.data?.error || t("products.addFailed"));
         },
       }
     );
@@ -109,7 +111,7 @@ const ProductsGrid = ({ products, isLoading, isError }: ProductsGridProps) => {
     return (
       <View className="py-20 items-center justify-center">
         <ActivityIndicator size="large" color="#1DB954" />
-        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading products...</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">{t("products.loading")}</Text>
       </View>
     );
   }
@@ -118,8 +120,8 @@ const ProductsGrid = ({ products, isLoading, isError }: ProductsGridProps) => {
     return (
       <View className="py-20 items-center justify-center">
         <Ionicons name="alert-circle-outline" size={48} color="#FF6B6B" />
-        <Text className="text-text-primary dark:text-text-primary-dark font-semibold mt-4">Failed to load products</Text>
-        <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mt-2">Please try again later</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark font-semibold mt-4">{t("products.failed")}</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mt-2">{t("products.tryLater")}</Text>
       </View>
     );
   }
@@ -141,11 +143,12 @@ const ProductsGrid = ({ products, isLoading, isError }: ProductsGridProps) => {
 export default ProductsGrid;
 
 function NoProductsFound() {
+  const { t } = useI18n();
   return (
     <View className="py-20 items-center justify-center">
       <Ionicons name="search-outline" size={48} color={"#64748B"} />
-      <Text className="text-text-primary dark:text-text-primary-dark font-semibold mt-4">No products found</Text>
-      <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mt-2">Try adjusting your filters</Text>
+      <Text className="text-text-primary dark:text-text-primary-dark font-semibold mt-4">{t("products.none")}</Text>
+      <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mt-2">{t("products.adjustFilters")}</Text>
     </View>
   );
 }

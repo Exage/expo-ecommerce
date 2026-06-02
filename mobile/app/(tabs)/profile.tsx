@@ -1,4 +1,5 @@
 import SafeScreen from "@/components/SafeScreen";
+import { useI18n } from "@/lib/i18n";
 import { setStoredTheme } from "@/lib/theme";
 import { useAuth, useUser } from "@clerk/clerk-expo";
 
@@ -9,15 +10,16 @@ import { router } from "expo-router";
 import { useColorScheme } from "nativewind";
 
 const MENU_ITEMS = [
-  { id: 1, icon: "person-outline", title: "Edit Profile", color: "#3B82F6", action: "/profile" },
-  { id: 2, icon: "list-outline", title: "Orders", color: "#10B981", action: "/orders" },
-  { id: 3, icon: "location-outline", title: "Addresses", color: "#F59E0B", action: "/addresses" },
-  { id: 4, icon: "heart-outline", title: "Wishlist", color: "#EF4444", action: "/wishlist" },
+  { id: 1, icon: "person-outline", titleKey: "profile.editProfile", color: "#3B82F6", action: "/profile" },
+  { id: 2, icon: "list-outline", titleKey: "profile.orders", color: "#10B981", action: "/orders" },
+  { id: 3, icon: "location-outline", titleKey: "profile.addresses", color: "#F59E0B", action: "/addresses" },
+  { id: 4, icon: "heart-outline", titleKey: "profile.wishlist", color: "#EF4444", action: "/wishlist" },
 ] as const;
 
 const ProfileScreen = () => {
   const { signOut } = useAuth();
   const { user } = useUser();
+  const { language, setLanguage, t } = useI18n();
   const { colorScheme, setColorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
   // const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
@@ -62,7 +64,7 @@ const ProfileScreen = () => {
                   {user?.firstName} {user?.lastName}
                 </Text>
                 <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">
-                  {user?.emailAddresses?.[0]?.emailAddress || "No email"}
+                  {user?.emailAddresses?.[0]?.emailAddress || t("profile.noEmail")}
                 </Text>
               </View>
             </View>
@@ -85,7 +87,7 @@ const ProfileScreen = () => {
               >
                 <Ionicons name={item.icon} size={28} color={item.color} />
               </View>
-              <Text className="text-text-primary dark:text-text-primary-dark font-bold text-base">{item.title}</Text>
+              <Text className="text-text-primary dark:text-text-primary-dark font-bold text-base">{t(item.titleKey)}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -96,7 +98,7 @@ const ProfileScreen = () => {
             <View className="flex-row items-center">
               <Ionicons name={isDark ? "moon-outline" : "sunny-outline"} size={22} color="#1DB954" />
               <Text className="text-text-primary dark:text-text-primary-dark font-semibold ml-3">
-                Dark Theme
+                {t("profile.darkTheme")}
               </Text>
             </View>
             <Switch
@@ -105,6 +107,28 @@ const ProfileScreen = () => {
               thumbColor="#FFFFFF"
               trackColor={switchTrackColor}
             />
+          </View>
+        </View>
+
+        <View className="mb-3 mx-6 bg-surface dark:bg-surface-dark rounded-2xl p-4">
+          <Text className="text-text-primary dark:text-text-primary-dark font-semibold mb-3">{t("language.label")}</Text>
+          <View className="flex-row gap-2">
+            <TouchableOpacity
+              className={`flex-1 rounded-xl py-3 items-center ${language === "ru" ? "bg-primary" : "bg-background-lighter dark:bg-background-dark-lighter"}`}
+              onPress={() => setLanguage("ru")}
+            >
+              <Text className={language === "ru" ? "text-background font-bold" : "text-text-primary dark:text-text-primary-dark font-semibold"}>
+                {t("language.russian")}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className={`flex-1 rounded-xl py-3 items-center ${language === "en" ? "bg-primary" : "bg-background-lighter dark:bg-background-dark-lighter"}`}
+              onPress={() => setLanguage("en")}
+            >
+              <Text className={language === "en" ? "text-background font-bold" : "text-text-primary dark:text-text-primary-dark font-semibold"}>
+                {t("language.english")}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -144,7 +168,7 @@ const ProfileScreen = () => {
           onPress={() => signOut()}
         >
           <Ionicons name="log-out-outline" size={22} color="#EF4444" />
-          <Text className="text-red-500 font-bold text-base ml-2">Sign Out</Text>
+          <Text className="text-red-500 font-bold text-base ml-2">{t("profile.signOut")}</Text>
         </TouchableOpacity>
 
         <Text className="mx-6 mb-3 text-center text-text-secondary dark:text-text-secondary-dark text-xs">Version 1.0.0</Text>

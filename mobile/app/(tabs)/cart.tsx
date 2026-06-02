@@ -2,6 +2,7 @@ import SafeScreen from "@/components/SafeScreen";
 import { useAddresses } from "@/hooks/useAddressess";
 import useCart from "@/hooks/useCart";
 import { useApi } from "@/lib/api";
+import { useI18n } from "@/lib/i18n";
 import { ActivityIndicator, Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useStripe } from "@stripe/stripe-react-native";
 import { useState } from "react";
@@ -17,6 +18,7 @@ import { useColorScheme } from "nativewind";
 
 const CartScreen = () => {
   const { colorScheme } = useColorScheme();
+  const { t } = useI18n();
   const isDark = colorScheme === "dark";
   const qtyIconColor = isDark ? "#FFFFFF" : "#0F172A";
 
@@ -53,10 +55,10 @@ const CartScreen = () => {
   };
 
   const handleRemoveItem = (productId: string, productName: string) => {
-    Alert.alert("Remove Item", `Remove ${productName} from cart?`, [
-      { text: "Cancel", style: "cancel" },
+    Alert.alert(t("cart.removeItem"), t("cart.removeFromCartQ", { name: productName }), [
+      { text: t("common.cancel"), style: "cancel" },
       {
-        text: "Remove",
+        text: t("common.remove"),
         style: "destructive",
         onPress: () => removeFromCart(productId),
       },
@@ -69,9 +71,9 @@ const CartScreen = () => {
     // check if user has addresses
     if (!addresses || addresses.length === 0) {
       Alert.alert(
-        "No Address",
-        "Please add a shipping address in your profile before checking out.",
-        [{ text: "OK" }]
+        t("cart.noAddressTitle"),
+        t("cart.noAddressDesc"),
+        [{ text: t("common.ok") }]
       );
       return;
     }
@@ -119,7 +121,7 @@ const CartScreen = () => {
           itemCount: cartItems.length,
         });
 
-        Alert.alert("Error", initError.message);
+        Alert.alert(t("common.error"), initError.message);
         setPaymentLoading(false);
         return;
       }
@@ -135,15 +137,15 @@ const CartScreen = () => {
           itemCount: cartItems.length,
         });
 
-        Alert.alert("Payment cancelled", presentError.message);
+        Alert.alert(t("cart.paymentCancelled"), presentError.message);
       } else {
         Sentry.logger.info("Payment successful", {
           total: total.toFixed(2),
           itemCount: cartItems.length,
         });
 
-        Alert.alert("Success", "Your payment was successful! Your order is being processed.", [
-          { text: "OK", onPress: () => {} },
+        Alert.alert(t("common.success"), t("cart.paymentSuccess"), [
+          { text: t("common.ok"), onPress: () => {} },
         ]);
         clearCart();
       }
@@ -152,7 +154,7 @@ const CartScreen = () => {
         ? error.response?.data?.error || error.response?.data?.message || error.message
         : error instanceof Error
           ? error.message
-          : "Unknown error";
+          : t("cart.unknownError");
 
       Sentry.logger.error("Payment failed", {
         error: errorMessage,
@@ -160,7 +162,7 @@ const CartScreen = () => {
         itemCount: cartItems.length,
       });
 
-      Alert.alert("Error", errorMessage);
+      Alert.alert(t("common.error"), errorMessage);
     } finally {
       setPaymentLoading(false);
     }
@@ -172,7 +174,7 @@ const CartScreen = () => {
 
   return (
     <SafeScreen>
-      <Text className="px-6 pb-5 text-text-primary dark:text-text-primary-dark text-3xl font-bold tracking-tight">Cart</Text>
+      <Text className="px-6 pb-5 text-text-primary dark:text-text-primary-dark text-3xl font-bold tracking-tight">{t("tabs.cart")}</Text>
 
       <ScrollView
         className="flex-1"
@@ -209,7 +211,7 @@ const CartScreen = () => {
                         ${(item.product.price * item.quantity).toFixed(2)}
                       </Text>
                       <Text className="text-text-secondary dark:text-text-secondary-dark text-sm ml-2">
-                        ${item.product.price.toFixed(2)} each
+                        ${item.product.price.toFixed(2)} {t("cart.each")}
                       </Text>
                     </View>
                   </View>
@@ -272,7 +274,7 @@ const CartScreen = () => {
           <View className="flex-row items-center">
             <Ionicons name="cart" size={20} color="#1DB954" />
             <Text className="text-text-secondary dark:text-text-secondary-dark ml-2">
-              {cartItemCount} {cartItemCount === 1 ? "item" : "items"}
+              {t("common.itemsCount", { count: cartItemCount })}
             </Text>
           </View>
           <View className="flex-row items-center">
@@ -292,7 +294,7 @@ const CartScreen = () => {
               <ActivityIndicator size="small" color="#F8FAFC" />
             ) : (
               <>
-                <Text className="text-background font-bold text-lg mr-2">Checkout</Text>
+                <Text className="text-background font-bold text-lg mr-2">{t("cart.checkout")}</Text>
                 <Ionicons name="arrow-forward" size={20} color="#F8FAFC" />
               </>
             )}
@@ -313,37 +315,40 @@ const CartScreen = () => {
 export default CartScreen;
 
 function LoadingUI() {
+  const { t } = useI18n();
   return (
     <View className="flex-1 bg-background dark:bg-background-dark items-center justify-center">
       <ActivityIndicator size="large" color="#1DB954" />
-      <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading cart...</Text>
+      <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">{t("cart.loading")}</Text>
     </View>
   );
 }
 
 function ErrorUI() {
+  const { t } = useI18n();
   return (
     <View className="flex-1 bg-background dark:bg-background-dark items-center justify-center px-6">
       <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">Failed to load cart</Text>
+      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">{t("cart.failed")}</Text>
       <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
-        Please check your connection and try again
+        {t("common.connectionRetry")}
       </Text>
     </View>
   );
 }
 
 function EmptyUI() {
+  const { t } = useI18n();
   return (
     <View className="flex-1 bg-background dark:bg-background-dark">
       <View className="px-6 pt-16 pb-5">
-        <Text className="text-text-primary dark:text-text-primary-dark text-3xl font-bold tracking-tight">Cart</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark text-3xl font-bold tracking-tight">{t("tabs.cart")}</Text>
       </View>
       <View className="flex-1 items-center justify-center px-6">
         <Ionicons name="cart-outline" size={80} color="#64748B" />
-        <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">Your cart is empty</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">{t("cart.empty")}</Text>
         <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
-          Add some products to get started
+          {t("cart.emptyDesc")}
         </Text>
       </View>
     </View>

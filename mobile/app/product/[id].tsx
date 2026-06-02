@@ -1,6 +1,7 @@
 import SafeScreen from "@/components/SafeScreen";
 import useCatalogMeta from "@/hooks/useCatalogMeta";
 import useCart from "@/hooks/useCart";
+import { useI18n } from "@/lib/i18n";
 import { useProduct } from "@/hooks/useProduct";
 import useWishlist from "@/hooks/useWishlist";
 import { CatalogSpecRule } from "@/types";
@@ -23,6 +24,7 @@ const { width } = Dimensions.get("window");
 
 const ProductDetailScreen = () => {
   const { colorScheme } = useColorScheme();
+  const { t } = useI18n();
   const isDark = colorScheme === "dark";
 
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -41,9 +43,9 @@ const ProductDetailScreen = () => {
     addToCart(
       { productId: product._id, quantity },
       {
-        onSuccess: () => Alert.alert("Success", `${product.name} added to cart!`),
+        onSuccess: () => Alert.alert(t("common.success"), t("products.added", { name: product.name })),
         onError: (error: any) => {
-          Alert.alert("Error", error?.response?.data?.error || "Failed to add to cart");
+          Alert.alert(t("common.error"), error?.response?.data?.error || t("products.addFailed"));
         },
       }
     );
@@ -70,7 +72,7 @@ const ProductDetailScreen = () => {
         if (rawValue === undefined || rawValue === null || rawValue === "") continue;
         rows.push({
           label: makeSpecLabel(key),
-          value: formatSpecValue(rawValue, rule),
+          value: formatSpecValue(rawValue, t, rule),
         });
       }
       return rows;
@@ -80,12 +82,12 @@ const ProductDetailScreen = () => {
       if (value === undefined || value === null || value === "") continue;
       rows.push({
         label: makeSpecLabel(key),
-        value: formatSpecValue(value),
+        value: formatSpecValue(value, t),
       });
     }
 
     return rows;
-  }, [catalogMeta, product.category, product.subcategory, product.specs]);
+  }, [catalogMeta, product.category, product.subcategory, product.specs, t]);
 
   return (
     <SafeScreen>
@@ -174,19 +176,19 @@ const ProductDetailScreen = () => {
               <Text className="text-text-primary dark:text-text-primary-dark font-bold ml-1 mr-2">
                 {product.averageRating.toFixed(1)}
               </Text>
-              <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">({product.totalReviews} reviews)</Text>
+              <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">({t("product.reviews", { count: product.totalReviews })})</Text>
             </View>
             {inStock ? (
               <View className="ml-3 flex-row items-center">
                 <View className="w-2 h-2 bg-green-500 rounded-full mr-2" />
                 <Text className="text-green-500 font-semibold text-sm">
-                  {product.stock} in stock
+                  {t("product.inStock", { count: product.stock })}
                 </Text>
               </View>
             ) : (
               <View className="ml-3 flex-row items-center">
                 <View className="w-2 h-2 bg-red-500 rounded-full mr-2" />
-                <Text className="text-red-500 font-semibold text-sm">Out of Stock</Text>
+                <Text className="text-red-500 font-semibold text-sm">{t("product.outOfStock")}</Text>
               </View>
             )}
           </View>
@@ -198,7 +200,7 @@ const ProductDetailScreen = () => {
 
           {/* Quantity */}
           <View className="mb-6">
-            <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-3">Quantity</Text>
+            <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-3">{t("product.quantity")}</Text>
 
             <View className="flex-row items-center">
               <TouchableOpacity
@@ -231,13 +233,13 @@ const ProductDetailScreen = () => {
             </View>
 
             {quantity >= product.stock && inStock && (
-              <Text className="text-orange-500 text-sm mt-2">Maximum stock reached</Text>
+              <Text className="text-orange-500 text-sm mt-2">{t("product.maxStock")}</Text>
             )}
           </View>
 
           {/* Description */}
           <View className="mb-8">
-            <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-3">Description</Text>
+            <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-3">{t("product.description")}</Text>
             <Text className="text-text-secondary dark:text-text-secondary-dark text-base leading-6">{product.description}</Text>
           </View>
 
@@ -245,7 +247,7 @@ const ProductDetailScreen = () => {
           {specsTableRows.length > 0 && (
             <View className="mb-8">
               <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-3">
-                Characteristics
+                {t("product.characteristics")}
               </Text>
               <View className="rounded-2xl border border-surface dark:border-surface-dark overflow-hidden">
                 {specsTableRows.map((row, index) => (
@@ -273,7 +275,7 @@ const ProductDetailScreen = () => {
       <View className="absolute bottom-0 left-0 right-0 bg-background/95 dark:bg-background-dark/95 backdrop-blur-xl border-t border-surface dark:border-surface-dark px-6 py-4 pb-8">
         <View className="flex-row items-center gap-3">
           <View className="flex-1">
-            <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mb-1">Total Price</Text>
+            <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mb-1">{t("product.totalPrice")}</Text>
             <Text className="text-primary text-2xl font-bold">
               ${(product.price * quantity).toFixed(2)}
             </Text>
@@ -296,7 +298,7 @@ const ProductDetailScreen = () => {
                     !inStock ? "text-text-secondary dark:text-text-secondary-dark" : "text-background"
                   }`}
                 >
-                  {!inStock ? "Out of Stock" : "Add to Cart"}
+                  {!inStock ? t("product.outOfStock") : t("product.addToCart")}
                 </Text>
               </>
             )}
@@ -317,14 +319,18 @@ function makeSpecLabel(key: string) {
     .trim();
 }
 
-function formatSpecValue(value: unknown, rule?: CatalogSpecRule) {
+function formatSpecValue(
+  value: unknown,
+  t: (key: string, params?: Record<string, string | number>) => string,
+  rule?: CatalogSpecRule
+) {
   if (Array.isArray(value)) {
     const rendered = value.map((item) => String(item)).join(", ");
     return rule?.unit ? `${rendered} ${rule.unit}` : rendered;
   }
 
   if (typeof value === "boolean") {
-    return value ? "Yes" : "No";
+    return value ? t("common.yes") : t("common.no");
   }
 
   if (value && typeof value === "object") {
@@ -336,19 +342,20 @@ function formatSpecValue(value: unknown, rule?: CatalogSpecRule) {
 }
 
 function ErrorUI() {
+  const { t } = useI18n();
   return (
     <SafeScreen>
       <View className="flex-1 items-center justify-center px-6">
         <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-        <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">Product not found</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">{t("product.notFound")}</Text>
         <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
-          This product may have been removed or doesn&apos;t exist
+          {t("product.notFoundDesc")}
         </Text>
         <TouchableOpacity
           className="bg-primary rounded-2xl px-6 py-3 mt-6"
           onPress={() => router.back()}
         >
-          <Text className="text-background font-bold">Go Back</Text>
+          <Text className="text-background font-bold">{t("product.goBack")}</Text>
         </TouchableOpacity>
       </View>
     </SafeScreen>
@@ -356,11 +363,12 @@ function ErrorUI() {
 }
 
 function LoadingUI() {
+  const { t } = useI18n();
   return (
     <SafeScreen>
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size="large" color="#1DB954" />
-        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading product...</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">{t("product.loading")}</Text>
       </View>
     </SafeScreen>
   );

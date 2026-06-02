@@ -1,6 +1,7 @@
 import SafeScreen from "@/components/SafeScreen";
 import useCart from "@/hooks/useCart";
 import useWishlist from "@/hooks/useWishlist";
+import { useI18n } from "@/lib/i18n";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
@@ -9,6 +10,7 @@ import { useColorScheme } from "nativewind";
 
 function WishlistScreen() {
   const { colorScheme } = useColorScheme();
+  const { t } = useI18n();
   const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
 
   const { wishlist, isLoading, isError, removeFromWishlist, isRemovingFromWishlist } =
@@ -17,10 +19,10 @@ function WishlistScreen() {
   const { addToCart, isAddingToCart } = useCart();
 
   const handleRemoveFromWishlist = (productId: string, productName: string) => {
-    Alert.alert("Remove from wishlist", `Remove ${productName} from wishlist`, [
-      { text: "Cancel", style: "cancel" },
+    Alert.alert(t("wishlist.removeTitle"), t("wishlist.removeQ", { name: productName }), [
+      { text: t("common.cancel"), style: "cancel" },
       {
-        text: "Remove",
+        text: t("common.remove"),
         style: "destructive",
 
         onPress: () => removeFromWishlist(productId),
@@ -32,9 +34,9 @@ function WishlistScreen() {
     addToCart(
       { productId, quantity: 1 },
       {
-        onSuccess: () => Alert.alert("Success", `${productName} added to cart!`),
+        onSuccess: () => Alert.alert(t("common.success"), t("products.added", { name: productName })),
         onError: (error: any) => {
-          Alert.alert("Error", error?.response?.data?.error || "Failed to add to cart");
+          Alert.alert(t("common.error"), error?.response?.data?.error || t("products.addFailed"));
         },
       }
     );
@@ -50,9 +52,9 @@ function WishlistScreen() {
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
           <Ionicons name="arrow-back" size={28} color={iconColor} />
         </TouchableOpacity>
-        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">Wishlist</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">{t("wishlist.title")}</Text>
         <Text className="text-text-secondary dark:text-text-secondary-dark text-sm ml-auto">
-          {wishlist.length} {wishlist.length === 1 ? "item" : "items"}
+          {t("common.itemsCount", { count: wishlist.length })}
         </Text>
       </View>
 
@@ -60,17 +62,17 @@ function WishlistScreen() {
         <View className="flex-1 items-center justify-center px-6">
           <Ionicons name="heart-outline" size={80} color="#64748B" />
           <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">
-            Your wishlist is empty
+            {t("wishlist.empty")}
           </Text>
           <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
-            Start adding products you love!
+            {t("wishlist.emptyDesc")}
           </Text>
           <TouchableOpacity
             className="bg-primary rounded-2xl px-8 py-4 mt-6"
             activeOpacity={0.8}
             onPress={() => router.push("/(tabs)")}
           >
-            <Text className="text-background font-bold text-base">Browse Products</Text>
+            <Text className="text-background font-bold text-base">{t("wishlist.browse")}</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -106,13 +108,13 @@ function WishlistScreen() {
                       <View className="flex-row items-center">
                         <View className="w-2 h-2 bg-green-500 rounded-full mr-2" />
                         <Text className="text-green-500 text-sm font-semibold">
-                          {item.stock} in stock
+                          {t("wishlist.inStock", { count: item.stock })}
                         </Text>
                       </View>
                     ) : (
                       <View className="flex-row items-center">
                         <View className="w-2 h-2 bg-red-500 rounded-full mr-2" />
-                        <Text className="text-red-500 text-sm font-semibold">Out of Stock</Text>
+                        <Text className="text-red-500 text-sm font-semibold">{t("wishlist.outOfStock")}</Text>
                       </View>
                     )}
                   </View>
@@ -137,7 +139,7 @@ function WishlistScreen() {
                       {isAddingToCart ? (
                         <ActivityIndicator size="small" color="#F8FAFC" />
                       ) : (
-                        <Text className="text-background font-bold">Add to Cart</Text>
+                        <Text className="text-background font-bold">{t("wishlist.addToCart")}</Text>
                       )}
                     </TouchableOpacity>
                   </View>
@@ -162,11 +164,11 @@ function LoadingUI() {
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
           <Ionicons name="arrow-back" size={28} color={iconColor} />
         </TouchableOpacity>
-        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">Wishlist</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">{t("wishlist.title")}</Text>
       </View>
       <View className="flex-1 items-center justify-center">
         <ActivityIndicator size="large" color="#1DB954" />
-        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading wishlist...</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">{t("wishlist.loading")}</Text>
       </View>
     </SafeScreen>
   );
@@ -182,15 +184,15 @@ function ErrorUI() {
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
           <Ionicons name="arrow-back" size={28} color={iconColor} />
         </TouchableOpacity>
-        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">Wishlist</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">{t("wishlist.title")}</Text>
       </View>
       <View className="flex-1 items-center justify-center px-6">
         <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
         <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">
-          Failed to load wishlist
+          {t("wishlist.failed")}
         </Text>
         <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
-          Please check your connection and try again
+          {t("common.connectionRetry")}
         </Text>
       </View>
     </SafeScreen>

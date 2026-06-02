@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Address } from "@/types";
+import { useI18n } from "@/lib/i18n";
 
 interface AddressCardProps {
   address: Address;
@@ -17,6 +18,7 @@ export default function AddressCard({
   isUpdatingAddress,
   isDeletingAddress,
 }: AddressCardProps) {
+  const { t } = useI18n();
   return (
     <View className="bg-surface dark:bg-surface-dark rounded-3xl p-5 mb-3">
       <View className="flex-row items-center justify-between mb-4">
@@ -28,7 +30,7 @@ export default function AddressCard({
         </View>
         {address.isDefault && (
           <View className="bg-primary px-3 py-1 rounded-full">
-            <Text className="text-background text-xs font-bold">Default</Text>
+            <Text className="text-background text-xs font-bold">{t("addresses.default")}</Text>
           </View>
         )}
       </View>
@@ -47,7 +49,7 @@ export default function AddressCard({
           onPress={() => onEdit(address)}
           disabled={isUpdatingAddress}
         >
-          <Text className="text-primary font-bold">Edit</Text>
+          <Text className="text-primary font-bold">{t("addresses.edit")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           className="flex-1 bg-red-500/20 py-3 rounded-xl items-center"
@@ -55,7 +57,7 @@ export default function AddressCard({
           onPress={() => onDelete(address._id, address.label)}
           disabled={isDeletingAddress}
         >
-          <Text className="text-red-500 font-bold">Delete</Text>
+          <Text className="text-red-500 font-bold">{t("addresses.delete")}</Text>
         </TouchableOpacity>
       </View>
     </View>

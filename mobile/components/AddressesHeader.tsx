@@ -2,9 +2,11 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useColorScheme } from "nativewind";
+import { useI18n } from "@/lib/i18n";
 
 export default function AddressesHeader() {
   const { colorScheme } = useColorScheme();
+  const { t } = useI18n();
   const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
 
   return (
@@ -12,7 +14,7 @@ export default function AddressesHeader() {
       <TouchableOpacity onPress={() => router.back()} className="mr-4">
         <Ionicons name="arrow-back" size={28} color={iconColor} />
       </TouchableOpacity>
-      <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">My Addresses</Text>
+      <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">{t("addresses.title")}</Text>
     </View>
   );
 }

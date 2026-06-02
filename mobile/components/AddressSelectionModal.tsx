@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { View, Text, Modal, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { useColorScheme } from "nativewind";
+import { useI18n } from "@/lib/i18n";
 
 interface AddressSelectionModalProps {
   visible: boolean;
@@ -19,6 +20,7 @@ const AddressSelectionModal = ({
   isProcessing,
 }: AddressSelectionModalProps) => {
   const { colorScheme } = useColorScheme();
+  const { t } = useI18n();
   const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
 
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
@@ -49,7 +51,7 @@ const AddressSelectionModal = ({
         <View className="bg-background dark:bg-background-dark rounded-t-3xl h-1/2">
           {/* Modal Header */}
           <View className="flex-row items-center justify-between p-6 border-b border-surface dark:border-surface-dark">
-            <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">Select Address</Text>
+            <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">{t("addressModal.select")}</Text>
             <TouchableOpacity onPress={onClose} className="bg-surface dark:bg-surface-dark rounded-full p-2">
               <Ionicons name="close" size={24} color={iconColor} />
             </TouchableOpacity>
@@ -82,7 +84,7 @@ const AddressSelectionModal = ({
                           </Text>
                           {address.isDefault && (
                             <View className="bg-primary/20 rounded-full px-3 py-1">
-                              <Text className="text-primary text-sm font-semibold">Default</Text>
+                              <Text className="text-primary text-sm font-semibold">{t("addresses.default")}</Text>
                             </View>
                           )}
                         </View>
@@ -124,7 +126,7 @@ const AddressSelectionModal = ({
                 ) : (
                   <>
                     <Text className="text-background font-bold text-lg mr-2">
-                      Continue to Payment
+                      {t("addressModal.continue")}
                     </Text>
                     <Ionicons name="arrow-forward" size={20} color="#F8FAFC" />
                   </>

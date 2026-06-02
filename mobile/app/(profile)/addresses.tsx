@@ -3,12 +3,14 @@ import AddressesHeader from "@/components/AddressesHeader";
 import AddressFormModal from "@/components/AddressFormModal";
 import SafeScreen from "@/components/SafeScreen";
 import { useAddresses } from "@/hooks/useAddressess";
+import { useI18n } from "@/lib/i18n";
 import { Address } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 function AddressesScreen() {
+  const { t } = useI18n();
   const {
     addAddress,
     addresses,
@@ -64,9 +66,9 @@ function AddressesScreen() {
   };
 
   const handleDeleteAddress = (addressId: string, label: string) => {
-    Alert.alert("Delete Address", `Are you sure you want to delete ${label}`, [
-      { text: "Cancel", style: "cancel" },
-      { text: "Delete", style: "destructive", onPress: () => deleteAddress(addressId) },
+    Alert.alert(t("addresses.deleteTitle"), t("addresses.deleteQ", { label }), [
+      { text: t("common.cancel"), style: "cancel" },
+      { text: t("addresses.delete"), style: "destructive", onPress: () => deleteAddress(addressId) },
     ]);
   };
 
@@ -80,7 +82,7 @@ function AddressesScreen() {
       !addressForm.zipCode ||
       !addressForm.phoneNumber
     ) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert(t("common.error"), t("addresses.fillAll"));
       return;
     }
 
@@ -95,10 +97,10 @@ function AddressesScreen() {
           onSuccess: () => {
             setShowAddressForm(false);
             setEditingAddressId(null);
-            Alert.alert("Success", "Address updated successfully");
+            Alert.alert(t("common.success"), t("addresses.updated"));
           },
           onError: (error: any) => {
-            Alert.alert("Error", error?.response?.data?.error || "Failed to update address");
+            Alert.alert(t("common.error"), error?.response?.data?.error || t("addresses.updateFailed"));
           },
         }
       );
@@ -107,10 +109,10 @@ function AddressesScreen() {
       addAddress(addressForm, {
         onSuccess: () => {
           setShowAddressForm(false);
-          Alert.alert("Success", "Address added successfully");
+          Alert.alert(t("common.success"), t("addresses.added"));
         },
         onError: (error: any) => {
-          Alert.alert("Error", error?.response?.data?.error || "Failed to add address");
+          Alert.alert(t("common.error"), error?.response?.data?.error || t("addresses.addFailed"));
         },
       });
     }
@@ -131,16 +133,16 @@ function AddressesScreen() {
       {addresses.length === 0 ? (
         <View className="flex-1 items-center justify-center px-6">
           <Ionicons name="location-outline" size={80} color="#64748B" />
-          <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">No addresses yet</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">{t("addresses.none")}</Text>
           <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
-            Add your first delivery address
+            {t("addresses.firstDesc")}
           </Text>
           <TouchableOpacity
             className="bg-primary rounded-2xl px-8 py-4 mt-6"
             activeOpacity={0.8}
             onPress={handleAddAddress}
           >
-            <Text className="text-background font-bold text-base">Add Address</Text>
+            <Text className="text-background font-bold text-base">{t("addresses.add")}</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -168,7 +170,7 @@ function AddressesScreen() {
             >
               <View className="flex-row items-center">
                 <Ionicons name="add-circle-outline" size={24} color="#F8FAFC" />
-                <Text className="text-background font-bold text-base ml-2">Add New Address</Text>
+                <Text className="text-background font-bold text-base ml-2">{t("addresses.addNew")}</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -191,16 +193,17 @@ function AddressesScreen() {
 export default AddressesScreen;
 
 function ErrorUI() {
+  const { t } = useI18n();
   return (
     <SafeScreen>
       <AddressesHeader />
       <View className="flex-1 items-center justify-center px-6">
         <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
         <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">
-          Failed to load addresses
+          {t("addresses.failed")}
         </Text>
         <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
-          Please check your connection and try again
+          {t("common.connectionRetry")}
         </Text>
       </View>
     </SafeScreen>
@@ -208,12 +211,13 @@ function ErrorUI() {
 }
 
 function LoadingUI() {
+  const { t } = useI18n();
   return (
     <SafeScreen>
       <AddressesHeader />
       <View className="flex-1 items-center justify-center px-6">
         <ActivityIndicator size="large" color="#1DB954" />
-        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading addresses...</Text>
+        <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">{t("addresses.loading")}</Text>
       </View>
     </SafeScreen>
   );

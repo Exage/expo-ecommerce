@@ -1,4 +1,5 @@
 import SafeScreen from "@/components/SafeScreen";
+import { useI18n } from "@/lib/i18n";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -15,6 +16,7 @@ type SecurityOption = {
 };
 
 function PrivacyAndSecurityScreen() {
+  const { t } = useI18n();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
 
@@ -29,23 +31,23 @@ function PrivacyAndSecurityScreen() {
     {
       id: "password",
       icon: "lock-closed-outline",
-      title: "Change Password",
-      description: "Update your account password",
+      title: t("privacy.changePassword"),
+      description: t("privacy.changePasswordDesc"),
       type: "navigation",
     },
     {
       id: "two-factor",
       icon: "shield-checkmark-outline",
-      title: "Two-Factor Authentication",
-      description: "Add an extra layer of security",
+      title: t("privacy.twoFactor"),
+      description: t("privacy.twoFactorDesc"),
       type: "toggle",
       value: twoFactorEnabled,
     },
     {
       id: "biometric",
       icon: "finger-print-outline",
-      title: "Biometric Login",
-      description: "Use Face ID or Touch ID",
+      title: t("privacy.biometric"),
+      description: t("privacy.biometricDesc"),
       type: "toggle",
       value: biometricEnabled,
     },
@@ -55,32 +57,32 @@ function PrivacyAndSecurityScreen() {
     {
       id: "push",
       icon: "notifications-outline",
-      title: "Push Notifications",
-      description: "Receive push notifications",
+      title: t("privacy.push"),
+      description: t("privacy.pushDesc"),
       type: "toggle",
       value: pushNotifications,
     },
     {
       id: "email",
       icon: "mail-outline",
-      title: "Email Notifications",
-      description: "Receive order updates via email",
+      title: t("privacy.email"),
+      description: t("privacy.emailDesc"),
       type: "toggle",
       value: emailNotifications,
     },
     {
       id: "marketing",
       icon: "megaphone-outline",
-      title: "Marketing Emails",
-      description: "Receive promotional emails",
+      title: t("privacy.marketing"),
+      description: t("privacy.marketingDesc"),
       type: "toggle",
       value: marketingEmails,
     },
     {
       id: "data",
       icon: "analytics-outline",
-      title: "Share Usage Data",
-      description: "Help us improve the app",
+      title: t("privacy.shareData"),
+      description: t("privacy.shareDataDesc"),
       type: "toggle",
       value: shareData,
     },
@@ -90,20 +92,20 @@ function PrivacyAndSecurityScreen() {
     {
       id: "activity",
       icon: "time-outline",
-      title: "Account Activity",
-      description: "View recent login activity",
+      title: t("privacy.activity"),
+      description: t("privacy.activityDesc"),
     },
     {
       id: "devices",
       icon: "phone-portrait-outline",
-      title: "Connected Devices",
-      description: "Manage devices with access",
+      title: t("privacy.devices"),
+      description: t("privacy.devicesDesc"),
     },
     {
       id: "data-download",
       icon: "download-outline",
-      title: "Download Your Data",
-      description: "Get a copy of your data",
+      title: t("privacy.downloadData"),
+      description: t("privacy.downloadDataDesc"),
     },
   ];
 
@@ -142,7 +144,7 @@ function PrivacyAndSecurityScreen() {
           <Ionicons name="arrow-back" size={28} color={iconColor} />
         </TouchableOpacity>
         <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">
-          Privacy & Security
+          {t("privacy.title")}
         </Text>
       </View>
 
@@ -153,7 +155,7 @@ function PrivacyAndSecurityScreen() {
       >
         {/* SECURITY SETTING */}
         <View className="px-6 pt-6">
-          <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-4">Security</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-4">{t("privacy.security")}</Text>
 
           {securitySettings.map((setting) => (
             <TouchableOpacity
@@ -192,7 +194,7 @@ function PrivacyAndSecurityScreen() {
 
         {/* Privacy Section */}
         <View className="px-6 pt-4">
-          <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-4">Privacy</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-4">{t("privacy.privacy")}</Text>
 
           {privacySettings.map((setting) => (
             <View key={setting.id}>
@@ -221,7 +223,7 @@ function PrivacyAndSecurityScreen() {
 
         {/* ACCOUNT SECTION */}
         <View className="px-6 pt-4">
-          <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-4">Account</Text>
+          <Text className="text-text-primary dark:text-text-primary-dark text-lg font-bold mb-4">{t("privacy.account")}</Text>
 
           {accountSettings.map((setting) => (
             <TouchableOpacity
@@ -256,8 +258,8 @@ function PrivacyAndSecurityScreen() {
                 <Ionicons name="trash-outline" size={24} color="#EF4444" />
               </View>
               <View>
-                <Text className="text-red-500 font-bold text-base mb-1">Delete Account</Text>
-                <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">Permanently delete your account</Text>
+                <Text className="text-red-500 font-bold text-base mb-1">{t("privacy.deleteAccount")}</Text>
+                <Text className="text-text-secondary dark:text-text-secondary-dark text-sm">{t("privacy.deleteAccountDesc")}</Text>
               </View>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#EF4444" />
@@ -269,8 +271,7 @@ function PrivacyAndSecurityScreen() {
           <View className="bg-primary/10 rounded-2xl p-4 flex-row">
             <Ionicons name="information-circle-outline" size={24} color="#1DB954" />
             <Text className="text-text-secondary dark:text-text-secondary-dark text-sm ml-3 flex-1">
-              We take your privacy seriously. Your data is encrypted and stored securely. You can
-              manage your privacy settings at any time.
+              {t("privacy.info")}
             </Text>
           </View>
         </View>

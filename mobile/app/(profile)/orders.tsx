@@ -2,6 +2,7 @@ import RatingModal from "@/components/RatingModal";
 import SafeScreen from "@/components/SafeScreen";
 import { useOrders } from "@/hooks/useOrders";
 import { useReviews } from "@/hooks/useReviews";
+import { useI18n } from "@/lib/i18n";
 import { capitalizeFirstLetter, formatDate, getStatusColor } from "@/lib/utils";
 import { Order } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,6 +13,7 @@ import { ActivityIndicator, Alert, ScrollView, Text, TouchableOpacity, View } fr
 import { useColorScheme } from "nativewind";
 
 function OrdersScreen() {
+  const { t } = useI18n();
   const { colorScheme } = useColorScheme();
   const iconColor = colorScheme === "dark" ? "#FFFFFF" : "#0F172A";
 
@@ -41,7 +43,7 @@ function OrdersScreen() {
     // check if all products have been rated
     const allRated = Object.values(productRatings).every((rating) => rating > 0);
     if (!allRated) {
-      Alert.alert("Error", "Please rate all products");
+      Alert.alert(t("common.error"), t("orders.rateAll"));
       return;
     }
 
@@ -56,12 +58,12 @@ function OrdersScreen() {
         })
       );
 
-      Alert.alert("Success", "Thank you for rating all products!");
+      Alert.alert(t("common.success"), t("orders.rateThanks"));
       setShowRatingModal(false);
       setSelectedOrder(null);
       setProductRatings({});
     } catch (error: any) {
-      Alert.alert("Error", error?.response?.data?.error || "Failed to submit rating");
+      Alert.alert(t("common.error"), error?.response?.data?.error || t("orders.rateFailed"));
     }
   };
 
@@ -72,7 +74,7 @@ function OrdersScreen() {
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
           <Ionicons name="arrow-back" size={28} color={iconColor} />
         </TouchableOpacity>
-        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">My Orders</Text>
+        <Text className="text-text-primary dark:text-text-primary-dark text-2xl font-bold">{t("orders.title")}</Text>
       </View>
 
       {isLoading ? (
@@ -114,7 +116,7 @@ function OrdersScreen() {
 
                     <View className="flex-1 ml-4">
                       <Text className="text-text-primary dark:text-text-primary-dark font-bold text-base mb-1">
-                        Order #{order._id.slice(-8).toUpperCase()}
+                        {t("orders.orderPrefix")} #{order._id.slice(-8).toUpperCase()}
                       </Text>
                       <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mb-2">
                         {formatDate(order.createdAt)}
@@ -146,7 +148,7 @@ function OrdersScreen() {
 
                   <View className="border-t border-background-lighter dark:border-background-dark-lighter pt-3 flex-row justify-between items-center">
                     <View>
-                      <Text className="text-text-secondary dark:text-text-secondary-dark text-xs mb-1">{totalItems} items</Text>
+                      <Text className="text-text-secondary dark:text-text-secondary-dark text-xs mb-1">{t("common.itemsCount", { count: totalItems })}</Text>
                       <Text className="text-primary font-bold text-xl">
                         ${order.totalPrice.toFixed(2)}
                       </Text>
@@ -156,7 +158,7 @@ function OrdersScreen() {
                       (order.hasReviewed ? (
                         <View className="bg-primary/20 px-5 py-3 rounded-full flex-row items-center">
                           <Ionicons name="checkmark-circle" size={18} color="#1DB954" />
-                          <Text className="text-primary font-bold text-sm ml-2">Reviewed</Text>
+                          <Text className="text-primary font-bold text-sm ml-2">{t("orders.reviewed")}</Text>
                         </View>
                       ) : (
                         <TouchableOpacity
@@ -166,7 +168,7 @@ function OrdersScreen() {
                         >
                           <Ionicons name="star" size={18} color="#F8FAFC" />
                           <Text className="text-background font-bold text-sm ml-2">
-                            Leave Rating
+                            {t("orders.leaveRating")}
                           </Text>
                         </TouchableOpacity>
                       ))}
@@ -195,33 +197,36 @@ function OrdersScreen() {
 export default OrdersScreen;
 
 function LoadingUI() {
+  const { t } = useI18n();
   return (
     <View className="flex-1 items-center justify-center">
       <ActivityIndicator size="large" color="#1DB954" />
-      <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">Loading orders...</Text>
+      <Text className="text-text-secondary dark:text-text-secondary-dark mt-4">{t("orders.loading")}</Text>
     </View>
   );
 }
 
 function ErrorUI() {
+  const { t } = useI18n();
   return (
     <View className="flex-1 items-center justify-center px-6">
       <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">Failed to load orders</Text>
+      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">{t("orders.failed")}</Text>
       <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
-        Please check your connection and try again
+        {t("common.connectionRetry")}
       </Text>
     </View>
   );
 }
 
 function EmptyUI() {
+  const { t } = useI18n();
   return (
     <View className="flex-1 items-center justify-center px-6">
       <Ionicons name="receipt-outline" size={80} color="#64748B" />
-      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">No orders yet</Text>
+      <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-xl mt-4">{t("orders.empty")}</Text>
       <Text className="text-text-secondary dark:text-text-secondary-dark text-center mt-2">
-        Your order history will appear here
+        {t("orders.emptyDesc")}
       </Text>
     </View>
   );
