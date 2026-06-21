@@ -1,5 +1,6 @@
 import { View, Text } from "react-native";
 import { useI18n } from "@/lib/i18n";
+import { formatPriceByn } from "@/lib/utils";
 
 interface OrderSummaryProps {
   subtotal: number;
@@ -18,21 +19,17 @@ export default function OrderSummary({ subtotal, shipping, tax, total }: OrderSu
         <View className="space-y-3">
           <View className="flex-row justify-between items-center">
             <Text className="text-text-secondary dark:text-text-secondary-dark text-base">{t("summary.subtotal")}</Text>
-            <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-base">
-              ${subtotal.toFixed(2)}
-            </Text>
+            <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-base">{formatPriceByn(subtotal)}</Text>
           </View>
 
           <View className="flex-row justify-between items-center">
             <Text className="text-text-secondary dark:text-text-secondary-dark text-base">{t("summary.shipping")}</Text>
-            <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-base">
-              ${shipping.toFixed(2)}
-            </Text>
+            <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-base">{formatPriceByn(shipping)}</Text>
           </View>
 
           <View className="flex-row justify-between items-center">
             <Text className="text-text-secondary dark:text-text-secondary-dark text-base">{t("summary.tax")}</Text>
-            <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-base">${tax.toFixed(2)}</Text>
+            <Text className="text-text-primary dark:text-text-primary-dark font-semibold text-base">{formatPriceByn(tax)}</Text>
           </View>
 
           {/* Divider */}
@@ -41,7 +38,7 @@ export default function OrderSummary({ subtotal, shipping, tax, total }: OrderSu
           {/* Total */}
           <View className="flex-row justify-between items-center">
             <Text className="text-text-primary dark:text-text-primary-dark font-bold text-lg">{t("summary.total")}</Text>
-            <Text className="text-primary font-bold text-2xl">${total.toFixed(2)}</Text>
+            <Text className="text-primary font-bold text-2xl">{formatPriceByn(total)}</Text>
           </View>
         </View>
       </View>

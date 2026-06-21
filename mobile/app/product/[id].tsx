@@ -2,6 +2,7 @@ import SafeScreen from "@/components/SafeScreen";
 import useCatalogMeta from "@/hooks/useCatalogMeta";
 import useCart from "@/hooks/useCart";
 import { useI18n } from "@/lib/i18n";
+import { formatPriceByn } from "@/lib/utils";
 import { useProduct } from "@/hooks/useProduct";
 import useWishlist from "@/hooks/useWishlist";
 import { CatalogSpecRule } from "@/types";
@@ -51,12 +52,10 @@ const ProductDetailScreen = () => {
     );
   };
 
-  if (isLoading) return <LoadingUI />;
-  if (isError || !product) return <ErrorUI />;
-
-  const inStock = product.stock > 0;
   const specsTableRows = useMemo(() => {
-    const rows: Array<{ label: string; value: string }> = [];
+    if (!product) return [];
+
+    const rows: { label: string; value: string }[] = [];
 
     const matchedCategory = catalogMeta?.categories.find((category) => category.name === product.category);
     const matchedSubcategory = matchedCategory?.subcategories.find(
@@ -87,7 +86,12 @@ const ProductDetailScreen = () => {
     }
 
     return rows;
-  }, [catalogMeta, product.category, product.subcategory, product.specs, t]);
+  }, [catalogMeta, product, t]);
+
+  if (isLoading) return <LoadingUI />;
+  if (isError || !product) return <ErrorUI />;
+
+  const inStock = product.stock > 0;
 
   return (
     <SafeScreen>
@@ -195,7 +199,7 @@ const ProductDetailScreen = () => {
 
           {/* Price */}
           <View className="flex-row items-center mb-6">
-            <Text className="text-primary text-4xl font-bold">${product.price.toFixed(2)}</Text>
+            <Text className="text-primary text-4xl font-bold">{formatPriceByn(product.price)}</Text>
           </View>
 
           {/* Quantity */}
@@ -277,7 +281,7 @@ const ProductDetailScreen = () => {
           <View className="flex-1">
             <Text className="text-text-secondary dark:text-text-secondary-dark text-sm mb-1">{t("product.totalPrice")}</Text>
             <Text className="text-primary text-2xl font-bold">
-              ${(product.price * quantity).toFixed(2)}
+              {formatPriceByn(product.price * quantity)}
             </Text>
           </View>
           <TouchableOpacity

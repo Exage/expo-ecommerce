@@ -3,6 +3,7 @@ import { useAddresses } from "@/hooks/useAddressess";
 import useCart from "@/hooks/useCart";
 import { useApi } from "@/lib/api";
 import { useI18n } from "@/lib/i18n";
+import { formatPriceByn } from "@/lib/utils";
 import { ActivityIndicator, Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useStripe } from "@stripe/stripe-react-native";
 import { useState } from "react";
@@ -44,8 +45,8 @@ const CartScreen = () => {
 
   const cartItems = cart?.items || [];
   const subtotal = cartTotal;
-  const shipping = 10.0; // $10 shipping fee
-  const tax = subtotal * 0.08; // 8% tax
+  const shipping = 10.0; // shipping fee
+  const tax = subtotal * 0.08; // tax
   const total = subtotal + shipping + tax;
 
   const handleQuantityChange = (productId: string, currentQuantity: number, change: number) => {
@@ -208,10 +209,10 @@ const CartScreen = () => {
                     </Text>
                     <View className="flex-row items-center mt-2">
                       <Text className="text-primary font-bold text-2xl">
-                        ${(item.product.price * item.quantity).toFixed(2)}
+                        {formatPriceByn(item.product.price * item.quantity)}
                       </Text>
                       <Text className="text-text-secondary dark:text-text-secondary-dark text-sm ml-2">
-                        ${item.product.price.toFixed(2)} {t("cart.each")}
+                        {formatPriceByn(item.product.price)} {t("cart.each")}
                       </Text>
                     </View>
                   </View>
@@ -278,7 +279,9 @@ const CartScreen = () => {
             </Text>
           </View>
           <View className="flex-row items-center">
-            <Text className="text-text-primary dark:text-text-primary-dark font-bold text-xl">${total.toFixed(2)}</Text>
+            <Text className="text-text-primary dark:text-text-primary-dark font-bold text-xl">
+              {formatPriceByn(total)}
+            </Text>
           </View>
         </View>
 

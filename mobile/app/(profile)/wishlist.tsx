@@ -2,6 +2,7 @@ import SafeScreen from "@/components/SafeScreen";
 import useCart from "@/hooks/useCart";
 import useWishlist from "@/hooks/useWishlist";
 import { useI18n } from "@/lib/i18n";
+import { formatPriceByn } from "@/lib/utils";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
@@ -100,9 +101,7 @@ function WishlistScreen() {
                     <Text className="text-text-primary dark:text-text-primary-dark font-bold text-base mb-2" numberOfLines={2}>
                       {item.name}
                     </Text>
-                    <Text className="text-primary font-bold text-xl mb-2">
-                      ${item.price.toFixed(2)}
-                    </Text>
+                    <Text className="text-primary font-bold text-xl mb-2">{formatPriceByn(item.price)}</Text>
 
                     {item.stock > 0 ? (
                       <View className="flex-row items-center">

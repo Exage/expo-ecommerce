@@ -1,5 +1,6 @@
 import SafeScreen from "@/components/SafeScreen";
 import { useApi } from "@/lib/api";
+import { formatPriceByn } from "@/lib/utils";
 import { Product } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
@@ -164,7 +165,7 @@ const AssistantScreen = () => {
                         {product.name}
                       </Text>
                       <Text className="text-primary font-bold text-base mt-2">
-                        ${Number(product.price || 0).toFixed(2)}
+                        {formatPriceByn(Number(product.price || 0))}
                       </Text>
                     </TouchableOpacity>
                   ))}

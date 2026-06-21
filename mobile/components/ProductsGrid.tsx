@@ -1,6 +1,7 @@
 import useCart from "@/hooks/useCart";
 import useWishlist from "@/hooks/useWishlist";
 import { useI18n } from "@/lib/i18n";
+import { formatPriceByn } from "@/lib/utils";
 import { Product } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -88,7 +89,7 @@ const ProductsGrid = ({ products, isLoading, isError }: ProductsGridProps) => {
         </View>
 
         <View className="flex-row items-center justify-between">
-          <Text className="text-primary font-bold text-lg">${product.price.toFixed(2)}</Text>
+          <Text className="text-primary font-bold text-lg">{formatPriceByn(product.price)}</Text>
 
           <TouchableOpacity
             className="bg-primary rounded-full w-8 h-8 items-center justify-center"

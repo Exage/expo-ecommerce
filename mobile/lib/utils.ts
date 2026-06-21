@@ -7,6 +7,8 @@ export const formatDate = (dateString: string) => {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 };
 
+export const formatPriceByn = (value: number) => `BYN ${value.toFixed(2)}`;
+
 export const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
     case "delivered":

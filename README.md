@@ -79,14 +79,52 @@ SENTRY_AUTH_TOKEN=<YOUR_SENTRY_DSN>
 EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY=<YOUR_STRIPE_PUBLISHABLE_KEY>
 ```
 
-## 🔧 Run the Backend
+## 🚀 Инструкция по запуску
+
+Проект запускается из корня репозитория одной командой, без ручного старта каждого приложения:
 
 ```bash
-
-cd backend
-npm install
-npm run dev
+npm run dev:all
 ```
+
+Этот скрипт автоматически поднимает:
+
+- `backend`
+- `admin`
+- `mobile`
+
+Если в одном из приложений нет `node_modules`, скрипт сам выполнит установку зависимостей перед запуском.
+
+### Альтернативные команды
+
+Если удобнее запускать через платформенный скрипт, можно использовать:
+
+- macOS/Linux: `bash scripts/start-all.sh`
+- Windows: `powershell -ExecutionPolicy Bypass -File .\scripts\start-all.ps1`
+
+### Требования для запуска
+
+- Docker 27.2.0
+- Visual Studio Code
+- Google Chrome
+
+### Как остановить проект
+
+Нажмите `Ctrl+C` в том терминале, где запущен общий стартовый скрипт.
+
+### Что будет доступно после запуска
+
+- API: `http://localhost:3000`
+- Admin dashboard: `http://localhost:5173`
+- Mobile app: Expo Dev Tools / QR-код в терминале
+
+### Если нужно запустить отдельно
+
+Скрипты ниже оставлены как резервный вариант, но обычно они не нужны:
+
+- Backend: `npm run dev --prefix backend`
+- Admin: `npm run dev --prefix admin`
+- Mobile: `npm run start --prefix mobile`
 
 ### AI Product Assistant Endpoint
 
@@ -99,27 +137,4 @@ Body example:
   "query": "Нужен недорогой смартфон с хорошей камерой",
   "limit": 6
 }
-```
-
----
-
-## 🔧 Run the Admin
-
-```
-bash
-cd admin
-npm install
-npm run dev
-```
-
----
-
-## 🔧 Run the Mobile
-
-```
-bash
-cd mobile
-npm install
-npx expo start
-*And then scan the QR Code from your phone*
 ```
